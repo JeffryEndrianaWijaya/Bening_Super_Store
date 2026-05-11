@@ -1,0 +1,60 @@
+.login-btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.55rem 1.4rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  box-shadow: 0 4px 14px rgba(200,115,58,0.25);
+
+  transition:
+    transform .2s,
+    box-shadow .2s,
+    opacity .2s;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(200,115,58,0.35);
+}
+
+.login-btn:active {
+  transform: scale(.97);
+}
+#payment-proof-preview div::-webkit-scrollbar {
+  width: 6px;
+}
+
+#payment-proof-preview div::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#payment-proof-preview div::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+/* SCROLL AREA PAYMENT PROOF */
+#proof-content::-webkit-scrollbar,
+#proof-content div::-webkit-scrollbar {
+  width: 6px;
+}
+
+#proof-content::-webkit-scrollbar-track,
+#proof-content div::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#proof-content::-webkit-scrollbar-thumb,
+#proof-content div::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 999px;
+}
