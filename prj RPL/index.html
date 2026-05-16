@@ -1,614 +1,1197 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BeningKomputer</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BeningKomputer</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
 
-  :root {
-    --cream: #FAF7F2;
-    --warm-white: #FFFDF9;
-    --charcoal: #1C1C1C;
-    --brown: #3D2B1F;
-    --accent: #C8733A;
-    --accent-light: #F5E6D8;
-    --accent-dark: #9E5625;
-    --muted: #888070;
-    --border: #E8E2D8;
-    --success: #2E7D5E;
-    --success-bg: #EAF5EF;
-    --shadow-sm: 0 2px 8px rgba(28,28,28,0.06);
-    --shadow-md: 0 6px 24px rgba(28,28,28,0.10);
-  }
+            :root {
+                --cream: #faf7f2;
+                --warm-white: #fffdf9;
+                --charcoal: #1c1c1c;
+                --brown: #3d2b1f;
+                --accent: #c8733a;
+                --accent-light: #f5e6d8;
+                --accent-dark: #9e5625;
+                --muted: #888070;
+                --border: #e8e2d8;
+                --success: #2e7d5e;
+                --success-bg: #eaf5ef;
+                --shadow-sm: 0 2px 8px rgba(28, 28, 28, 0.06);
+                --shadow-md: 0 6px 24px rgba(28, 28, 28, 0.1);
+            }
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--charcoal);
-    min-height: 100vh;
-  }
+            body {
+                font-family: "DM Sans", sans-serif;
+                background: var(--cream);
+                color: var(--charcoal);
+                min-height: 100vh;
+            }
 
-  /* NAV */
-  nav {
-    background: var(--warm-white);
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 100;
-    padding: 0 2rem;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 64px;
-  }
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.4rem; color: var(--brown);
-    letter-spacing: -0.5px;
-  }
-  .nav-logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a { text-decoration: none; font-size: 0.88rem; font-weight: 400; color: var(--muted); transition: color .2s; }
-  .nav-links a:hover, .nav-links a.active { color: var(--charcoal); }
-  .nav-actions { display: flex; align-items: center; gap: 1rem; }
-  .cart-btn {
-    background: var(--charcoal); color: #fff;
-    border: none; border-radius: 999px;
-    padding: 0.5rem 1.2rem; font-size: 0.85rem;
-    cursor: pointer; display: flex; align-items: center; gap: 6px;
-    font-family: inherit; transition: background .2s;
-  }
-  .cart-btn:hover { background: var(--brown); }
-  .cart-count {
-    background: var(--accent); color: #fff;
-    border-radius: 50%; width: 18px; height: 18px;
-    font-size: 0.7rem; display: flex; align-items: center; justify-content: center;
-  }
-  .login-btn {
-    background: transparent; color: var(--charcoal);
-    border: 1px solid var(--border); border-radius: 999px;
-    padding: 0.5rem 1.2rem; font-size: 0.85rem;
-    cursor: pointer; display: flex; align-items: center; gap: 6px;
-    font-family: inherit; transition: all .2s;
-  }
-  .login-btn:hover { background: var(--charcoal); color: #fff; border-color: var(--charcoal); }
+            /* NAV */
+            nav {
+                background: var(--warm-white);
+                border-bottom: 1px solid var(--border);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                padding: 0 2rem;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                height: 64px;
+            }
+            .nav-logo {
+                font-family: "Playfair Display", serif;
+                font-size: 1.4rem;
+                color: var(--brown);
+                letter-spacing: -0.5px;
+            }
+            .nav-logo span {
+                color: var(--accent);
+            }
+            .nav-links {
+                display: flex;
+                gap: 2rem;
+                list-style: none;
+            }
+            .nav-links a {
+                text-decoration: none;
+                font-size: 0.88rem;
+                font-weight: 400;
+                color: var(--muted);
+                transition: color 0.2s;
+            }
+            .nav-links a:hover,
+            .nav-links a.active {
+                color: var(--charcoal);
+            }
+            .nav-actions {
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+            }
+            .cart-btn {
+                background: var(--charcoal);
+                color: #fff;
+                border: none;
+                border-radius: 999px;
+                padding: 0.5rem 1.2rem;
+                font-size: 0.85rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-family: inherit;
+                transition: background 0.2s;
+            }
+            .cart-btn:hover {
+                background: var(--brown);
+            }
+            .cart-count {
+                background: var(--accent);
+                color: #fff;
+                border-radius: 50%;
+                width: 18px;
+                height: 18px;
+                font-size: 0.7rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .login-btn {
+                background: transparent;
+                color: var(--charcoal);
+                border: 1px solid var(--border);
+                border-radius: 999px;
+                padding: 0.5rem 1.2rem;
+                font-size: 0.85rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                font-family: inherit;
+                transition: all 0.2s;
+            }
+            .login-btn:hover {
+                background: var(--charcoal);
+                color: #fff;
+                border-color: var(--charcoal);
+            }
 
-  /* HERO */
-  .hero {
-    background: var(--warm-white);
-    padding: 5rem 2rem 4rem;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-  }
-  .hero-tag {
-    display: inline-block; background: var(--accent-light); color: var(--accent-dark);
-    font-size: 0.75rem; font-weight: 500; letter-spacing: 1.5px; text-transform: uppercase;
-    padding: 4px 14px; border-radius: 999px; margin-bottom: 1.2rem;
-  }
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 5vw, 3.4rem);
-    color: var(--brown); line-height: 1.15;
-    max-width: 600px; margin: 0 auto 1rem;
-  }
-  .hero p { color: var(--muted); max-width: 460px; margin: 0 auto 2rem; line-height: 1.7; }
-  .hero-cta {
-    background: var(--accent); color: #fff;
-    border: none; border-radius: 999px;
-    padding: 0.75rem 2rem; font-size: 0.9rem; font-weight: 500;
-    cursor: pointer; font-family: inherit; transition: background .2s;
-  }
-  .hero-cta:hover { background: var(--accent-dark); }
+            /* HERO */
+            .hero {
+                background: var(--warm-white);
+                padding: 5rem 2rem 4rem;
+                text-align: center;
+                border-bottom: 1px solid var(--border);
+            }
+            .hero-tag {
+                display: inline-block;
+                background: var(--accent-light);
+                color: var(--accent-dark);
+                font-size: 0.75rem;
+                font-weight: 500;
+                letter-spacing: 1.5px;
+                text-transform: uppercase;
+                padding: 4px 14px;
+                border-radius: 999px;
+                margin-bottom: 1.2rem;
+            }
+            .hero h1 {
+                font-family: "Playfair Display", serif;
+                font-size: clamp(2rem, 5vw, 3.4rem);
+                color: var(--brown);
+                line-height: 1.15;
+                max-width: 600px;
+                margin: 0 auto 1rem;
+            }
+            .hero p {
+                color: var(--muted);
+                max-width: 460px;
+                margin: 0 auto 2rem;
+                line-height: 1.7;
+            }
+            .hero-cta {
+                background: var(--accent);
+                color: #fff;
+                border: none;
+                border-radius: 999px;
+                padding: 0.75rem 2rem;
+                font-size: 0.9rem;
+                font-weight: 500;
+                cursor: pointer;
+                font-family: inherit;
+                transition: background 0.2s;
+            }
+            .hero-cta:hover {
+                background: var(--accent-dark);
+            }
 
-  /* FILTER */
-  .filter-bar {
-    padding: 1.5rem 2rem;
-    display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;
-    border-bottom: 1px solid var(--border);
-    background: var(--warm-white);
-  }
-  .filter-label { font-size: 0.8rem; color: var(--muted); margin-right: 0.25rem; }
-  .filter-btn {
-    background: transparent; border: 1px solid var(--border);
-    border-radius: 999px; padding: 0.35rem 1rem;
-    font-size: 0.82rem; cursor: pointer; font-family: inherit; color: var(--charcoal);
-    transition: all .2s;
-  }
-  .filter-btn:hover, .filter-btn.active {
-    background: var(--charcoal); color: #fff; border-color: var(--charcoal);
-  }
-  .search-bar {
-    margin-left: auto;
-    display: flex; align-items: center;
-    border: 1px solid var(--border); border-radius: 999px;
-    background: var(--cream); overflow: hidden; padding: 0 1rem;
-    gap: 6px;
-  }
-  .search-bar input {
-    border: none; background: transparent; outline: none;
-    font-size: 0.82rem; font-family: inherit;
-    padding: 0.35rem 0; width: 160px; color: var(--charcoal);
-  }
-  .search-bar svg { width: 15px; color: var(--muted); }
+            /* FILTER */
+            .filter-bar {
+                padding: 1.5rem 2rem;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+                border-bottom: 1px solid var(--border);
+                background: var(--warm-white);
+            }
+            .filter-label {
+                font-size: 0.8rem;
+                color: var(--muted);
+                margin-right: 0.25rem;
+            }
+            .filter-btn {
+                background: transparent;
+                border: 1px solid var(--border);
+                border-radius: 999px;
+                padding: 0.35rem 1rem;
+                font-size: 0.82rem;
+                cursor: pointer;
+                font-family: inherit;
+                color: var(--charcoal);
+                transition: all 0.2s;
+            }
+            .filter-btn:hover,
+            .filter-btn.active {
+                background: var(--charcoal);
+                color: #fff;
+                border-color: var(--charcoal);
+            }
+            .search-bar {
+                margin-left: auto;
+                display: flex;
+                align-items: center;
+                border: 1px solid var(--border);
+                border-radius: 999px;
+                background: var(--cream);
+                overflow: hidden;
+                padding: 0 1rem;
+                gap: 6px;
+            }
+            .search-bar input {
+                border: none;
+                background: transparent;
+                outline: none;
+                font-size: 0.82rem;
+                font-family: inherit;
+                padding: 0.35rem 0;
+                width: 160px;
+                color: var(--charcoal);
+            }
+            .search-bar svg {
+                width: 15px;
+                color: var(--muted);
+            }
 
-  /* PRODUCTS GRID */
-  .section { padding: 2rem; }
-  .section-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.5rem; }
-  .section-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--brown); }
-  .section-count { font-size: 0.8rem; color: var(--muted); }
+            /* PRODUCTS GRID */
+            .section {
+                padding: 2rem;
+            }
+            .section-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: baseline;
+                margin-bottom: 1.5rem;
+            }
+            .section-title {
+                font-family: "Playfair Display", serif;
+                font-size: 1.5rem;
+                color: var(--brown);
+            }
+            .section-count {
+                font-size: 0.8rem;
+                color: var(--muted);
+            }
 
-  .products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-    gap: 1.5rem;
-  }
+            .products-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+                gap: 1.5rem;
+            }
 
-  .product-card {
-    background: var(--warm-white);
-    border-radius: 16px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    transition: box-shadow .25s, transform .25s;
-    cursor: pointer;
-  }
-  .product-card:hover { box-shadow: var(--shadow-md); transform: translateY(-3px); }
+            .product-card {
+                background: var(--warm-white);
+                border-radius: 16px;
+                overflow: hidden;
+                border: 1px solid var(--border);
+                transition:
+                    box-shadow 0.25s,
+                    transform 0.25s;
+                cursor: pointer;
+            }
+            .product-card:hover {
+                box-shadow: var(--shadow-md);
+                transform: translateY(-3px);
+            }
 
-  .product-img {
-    width: 100%; aspect-ratio: 4/3; object-fit: cover;
-    background: var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 3rem; position: relative;
-  }
-  .product-badge {
-    position: absolute; top: 10px; left: 10px;
-    background: var(--accent); color: #fff;
-    font-size: 0.7rem; font-weight: 500; padding: 3px 9px; border-radius: 999px;
-  }
-  .product-badge.sale { background: #C0392B; }
-  .product-badge.new { background: var(--success); }
+            .product-img {
+                width: 100%;
+                aspect-ratio: 4/3;
+                object-fit: cover;
+                background: var(--border);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 3rem;
+                position: relative;
+            }
+            .product-badge {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                background: var(--accent);
+                color: #fff;
+                font-size: 0.7rem;
+                font-weight: 500;
+                padding: 3px 9px;
+                border-radius: 999px;
+            }
+            .product-badge.sale {
+                background: #c0392b;
+            }
+            .product-badge.new {
+                background: var(--success);
+            }
 
-  .product-info { padding: 1rem 1.1rem 1.1rem; }
-  .product-cat { font-size: 0.72rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
-  .product-name { font-weight: 500; font-size: 0.95rem; margin-bottom: 6px; color: var(--charcoal); }
-  .product-rating { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; }
-  .stars { color: #E8B84B; font-size: 0.75rem; }
-  .rating-text { font-size: 0.72rem; color: var(--muted); }
-  .product-footer { display: flex; align-items: center; justify-content: space-between; }
-  .product-price { font-weight: 500; font-size: 1rem; color: var(--brown); }
-  .product-price-old { font-size: 0.78rem; color: var(--muted); text-decoration: line-through; margin-left: 4px; }
-  .add-btn {
-    background: var(--charcoal); color: #fff;
-    border: none; border-radius: 8px;
-    width: 32px; height: 32px;
-    font-size: 1.2rem; display: flex; align-items: center; justify-content: center;
-    cursor: pointer; transition: background .2s;
-  }
-  .add-btn:hover { background: var(--accent); }
+            .product-info {
+                padding: 1rem 1.1rem 1.1rem;
+            }
+            .product-cat {
+                font-size: 0.72rem;
+                color: var(--muted);
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 4px;
+            }
+            .product-name {
+                font-weight: 500;
+                font-size: 0.95rem;
+                margin-bottom: 6px;
+                color: var(--charcoal);
+            }
+            .product-rating {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                margin-bottom: 10px;
+            }
+            .stars {
+                color: #e8b84b;
+                font-size: 0.75rem;
+            }
+            .rating-text {
+                font-size: 0.72rem;
+                color: var(--muted);
+            }
+            .product-footer {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .product-price {
+                font-weight: 500;
+                font-size: 1rem;
+                color: var(--brown);
+            }
+            .product-price-old {
+                font-size: 0.78rem;
+                color: var(--muted);
+                text-decoration: line-through;
+                margin-left: 4px;
+            }
+            .add-btn {
+                background: var(--charcoal);
+                color: #fff;
+                border: none;
+                border-radius: 8px;
+                width: 32px;
+                height: 32px;
+                font-size: 1.2rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            .add-btn:hover {
+                background: var(--accent);
+            }
 
+            /* TOAST */
 
+            .toast {
+                position: fixed;
+                bottom: 2rem;
+                right: 2rem;
+                background: var(--charcoal);
+                color: #fff;
+                padding: 0.75rem 1.25rem;
+                border-radius: 10px;
+                font-size: 0.85rem;
+                box-shadow: var(--shadow-md);
+                opacity: 0;
+                transform: translateY(10px);
+                transition: all 0.3s;
+                pointer-events: none;
+                z-index: 999;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .toast.show {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            .toast-dot {
+                width: 8px;
+                height: 8px;
+                background: var(--accent);
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
 
-  
-  /* TOAST */
+            /* CART MODAL */
+            .overlay {
+                position: fixed;
+                inset: 0;
+                background: rgba(28, 28, 28, 0.45);
+                z-index: 200;
+                display: none;
+                align-items: flex-end;
+                justify-content: flex-end;
+            }
+            .overlay.open {
+                display: flex;
+            }
+            .cart-panel {
+                background: var(--warm-white);
+                width: 380px;
+                height: 100vh;
+                padding: 2rem 1.5rem;
+                overflow-y: auto;
+                display: flex;
+                flex-direction: column;
+                gap: 1.25rem;
+                animation: slideIn 0.3s ease;
+            }
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                }
+                to {
+                    transform: translateX(0);
+                }
+            }
+            .cart-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .cart-title {
+                font-family: "Playfair Display", serif;
+                font-size: 1.3rem;
+                color: var(--brown);
+            }
+            .close-btn {
+                background: none;
+                border: 1px solid var(--border);
+                border-radius: 50%;
+                width: 32px;
+                height: 32px;
+                cursor: pointer;
+                font-size: 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--muted);
+            }
+            .close-btn:hover {
+                background: var(--cream);
+            }
 
-  
-  .toast {
-    position: fixed; bottom: 2rem; right: 2rem;
-    background: var(--charcoal); color: #fff;
-    padding: 0.75rem 1.25rem; border-radius: 10px;
-    font-size: 0.85rem; box-shadow: var(--shadow-md);
-    opacity: 0; transform: translateY(10px);
-    transition: all .3s; pointer-events: none; z-index: 999;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-  .toast-dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
+            .cart-empty {
+                text-align: center;
+                color: var(--muted);
+                font-size: 0.9rem;
+                padding: 3rem 0;
+            }
+            .cart-items {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            .cart-item {
+                display: flex;
+                gap: 1rem;
+                align-items: center;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid var(--border);
+            }
+            .cart-item-emoji {
+                font-size: 2rem;
+                width: 52px;
+                height: 52px;
+                background: var(--cream);
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+            }
+            .cart-item-info {
+                flex: 1;
+            }
+            .cart-item-name {
+                font-weight: 500;
+                font-size: 0.88rem;
+                margin-bottom: 4px;
+            }
+            .cart-item-price {
+                font-size: 0.85rem;
+                color: var(--accent);
+            }
+            .cart-item-qty {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin-top: 6px;
+            }
+            .qty-btn {
+                background: var(--cream);
+                border: 1px solid var(--border);
+                border-radius: 6px;
+                width: 24px;
+                height: 24px;
+                cursor: pointer;
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .qty-btn:hover {
+                background: var(--border);
+            }
+            .qty-num {
+                font-size: 0.85rem;
+                font-weight: 500;
+                min-width: 20px;
+                text-align: center;
+            }
+            .remove-item {
+                background: none;
+                border: none;
+                color: var(--muted);
+                cursor: pointer;
+                font-size: 0.75rem;
+                margin-left: auto;
+            }
+            .remove-item:hover {
+                color: #c0392b;
+            }
 
-  
+            .cart-summary {
+                border-top: 2px solid var(--border);
+                padding-top: 1rem;
+            }
+            .cart-row {
+                display: flex;
+                justify-content: space-between;
+                font-size: 0.88rem;
+                margin-bottom: 8px;
+                color: var(--muted);
+            }
+            .cart-total {
+                font-size: 1rem;
+                font-weight: 500;
+                color: var(--charcoal);
+            }
+            .checkout-btn {
+                width: 100%;
+                background: var(--accent);
+                color: #fff;
+                border: none;
+                border-radius: 12px;
+                padding: 0.85rem;
+                font-size: 0.92rem;
+                font-weight: 500;
+                cursor: pointer;
+                font-family: inherit;
+                margin-top: 1rem;
+                transition: background 0.2s;
+            }
+            .checkout-btn:hover {
+                background: var(--accent-dark);
+            }
 
-  /* CART MODAL */
-  .overlay {
-    position: fixed; inset: 0; background: rgba(28,28,28,.45);
-    z-index: 200; display: none; align-items: flex-end; justify-content: flex-end;
-  }
-  .overlay.open { display: flex; }
-  .cart-panel {
-    background: var(--warm-white); width: 380px; height: 100vh;
-    padding: 2rem 1.5rem; overflow-y: auto;
-    display: flex; flex-direction: column; gap: 1.25rem;
-    animation: slideIn .3s ease;
-  }
-  @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
-  .cart-header { display: flex; justify-content: space-between; align-items: center; }
-  .cart-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--brown); }
-  .close-btn { background: none; border: 1px solid var(--border); border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; color: var(--muted); }
-  .close-btn:hover { background: var(--cream); }
+            /* FOOTER */
+            footer {
+                background: var(--brown);
+                color: rgba(255, 255, 255, 0.6);
+                text-align: center;
+                padding: 2rem;
+                font-size: 0.8rem;
+                margin-top: 3rem;
+            }
+            footer strong {
+                color: #fff;
+            }
 
-  .cart-empty { text-align: center; color: var(--muted); font-size: 0.9rem; padding: 3rem 0; }
-  .cart-items { flex: 1; display: flex; flex-direction: column; gap: 1rem; }
-  .cart-item { display: flex; gap: 1rem; align-items: center; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
-  .cart-item-emoji { font-size: 2rem; width: 52px; height: 52px; background: var(--cream); border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .cart-item-info { flex: 1; }
-  .cart-item-name { font-weight: 500; font-size: 0.88rem; margin-bottom: 4px; }
-  .cart-item-price { font-size: 0.85rem; color: var(--accent); }
-  .cart-item-qty { display: flex; align-items: center; gap: 8px; margin-top: 6px; }
-  .qty-btn { background: var(--cream); border: 1px solid var(--border); border-radius: 6px; width: 24px; height: 24px; cursor: pointer; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; }
-  .qty-btn:hover { background: var(--border); }
-  .qty-num { font-size: 0.85rem; font-weight: 500; min-width: 20px; text-align: center; }
-  .remove-item { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 0.75rem; margin-left: auto; }
-  .remove-item:hover { color: #C0392B; }
+            /* RESPONSIVE */
+            @media (max-width: 600px) {
+                .nav-links {
+                    display: none;
+                }
+                .search-bar input {
+                    width: 110px;
+                }
+                .cart-panel {
+                    width: 100vw;
+                }
+                .hero h1 {
+                    font-size: 1.8rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- NAVBAR -->
+        <nav>
+            <div class="nav-logo">Bening<span>Komputer</span></div>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="login-btn" onclick="openLogin()">
+                    👤 Login
+                </button>
 
-  .cart-summary { border-top: 2px solid var(--border); padding-top: 1rem; }
-  .cart-row { display: flex; justify-content: space-between; font-size: 0.88rem; margin-bottom: 8px; color: var(--muted); }
-  .cart-total { font-size: 1rem; font-weight: 500; color: var(--charcoal); }
-  .checkout-btn {
-    width: 100%; background: var(--accent); color: #fff;
-    border: none; border-radius: 12px;
-    padding: 0.85rem; font-size: 0.92rem; font-weight: 500;
-    cursor: pointer; font-family: inherit; margin-top: 1rem;
-    transition: background .2s;
-  }
-  .checkout-btn:hover { background: var(--accent-dark); }
+                <button class="cart-btn" onclick="openCart()">
+                    🛒 Keranjang
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+            </div>
+        </nav>
 
-  /* FOOTER */
-  footer { background: var(--brown); color: rgba(255,255,255,.6); text-align: center; padding: 2rem; font-size: 0.8rem; margin-top: 3rem; }
-  footer strong { color: #fff; }
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-tag">✨ Koleksi Terbaru 2026</div>
+            <h1>Produk Pilihan<br />Terbaik Untuk Anda</h1>
+            <p>Temukan produk berkualitas dengan harga terjangkau.</p>
+            <button
+                class="hero-cta"
+                onclick="
+                    document
+                        .querySelector('.section')
+                        .scrollIntoView({ behavior: 'smooth' })
+                "
+            >
+                Belanja Sekarang
+            </button>
+        </section>
 
-  /* RESPONSIVE */
-  @media (max-width: 600px) {
-    .nav-links { display: none; }
-    .search-bar input { width: 110px; }
-    .cart-panel { width: 100vw; }
-    .hero h1 { font-size: 1.8rem; }
-  }
-</style>
-</head>
-<body>
+        <!-- FILTER BAR -->
+        <div class="filter-bar">
+            <span class="filter-label">Kategori:</span>
+            <button
+                class="filter-btn active"
+                onclick="filterProducts('semua', this)"
+            >
+                Semua
+            </button>
+            <button class="filter-btn" onclick="filterProducts('laptop', this)">
+                laptop
+            </button>
+            <button
+                class="filter-btn"
+                onclick="filterProducts('aksesoris', this)"
+            >
+                aksesoris
+            </button>
+            <button
+                class="filter-btn"
+                onclick="filterProducts('komponen komputer', this)"
+            >
+                Komponen
+            </button>
+            <button
+                class="filter-btn"
+                onclick="filterProducts('printer', this)"
+            >
+                Printer
+            </button>
 
-<!-- NAVBAR -->
-<nav>
-  <div class="nav-logo">Bening<span>Komputer</span></div>
-  <ul class="nav-links">
-    <li><a href="#" class="active">Home</a></li>
+            <div class="search-bar">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                    />
+                </svg>
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Cari produk..."
+                    oninput="searchProducts(this.value)"
+                />
+            </div>
+        </div>
 
-  </ul>
-<div class="nav-actions">
+        <!-- PRODUCTS -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Produk Pilihan</h2>
+                <span class="section-count" id="product-count"></span>
+            </div>
+            <div class="products-grid" id="products-grid"></div>
+        </div>
 
-  <button class="login-btn" onclick="openLogin()">
-    👤 Login
-  </button>
-
-  <button class="cart-btn" onclick="openCart()">
-      🛒 Keranjang
-      <span class="cart-count" id="cart-count">0</span>
-    </button>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-tag">✨ Koleksi Terbaru 2026</div>
-  <h1>Produk Pilihan<br>Terbaik Untuk Anda</h1>
-  <p>Temukan produk berkualitas dengan harga terjangkau.</p>
-  <button class="hero-cta" onclick="document.querySelector('.section').scrollIntoView({behavior:'smooth'})">Belanja Sekarang</button>
-</section>
-
-<!-- FILTER BAR -->
-<div class="filter-bar">
-  <span class="filter-label">Kategori:</span>
-  <button class="filter-btn active" onclick="filterProducts('semua', this)">Semua</button>
-  <button class="filter-btn" onclick="filterProducts('laptop', this)"> laptop</button>
-	<button class="filter-btn" onclick="filterProducts('aksesoris', this)"> aksesoris</button>
-	 <button class="filter-btn" onclick="filterProducts('komponen komputer', this)"> Komponen</button>
-	  <button class="filter-btn" onclick="filterProducts('printer', this)"> Printer</button>
-
-
-
-
-
-  <div class="search-bar">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-    <input type="text" id="search-input" placeholder="Cari produk..." oninput="searchProducts(this.value)" />
-  </div>
-</div>
-
-<!-- PRODUCTS -->
-<div class="section">
-  <div class="section-header">
-    <h2 class="section-title">Produk Pilihan</h2>
-    <span class="section-count" id="product-count"></span>
-  </div>
-  <div class="products-grid" id="products-grid"></div>
-</div>
-
-<!-- CART OVERLAY -->
-<div class="overlay" id="cart-overlay" onclick="handleOverlayClick(event)">
-  <div class="cart-panel">
-    <div class="cart-header">
-      <span class="cart-title">Keranjang Belanja</span>
-      <button class="close-btn" onclick="closeCart()">✕</button>
-    </div>
-    <div id="cart-content"></div>
-  </div>
-</div>
-
-<!-- LOGIN MODAL -->
-<div class="overlay" id="login-overlay" onclick="closeLoginOverlay(event)">
-  
-  <div class="cart-panel" style="
-    max-width:420px;
-    height:auto;
-    border-radius:20px;
-    margin:auto;
-  ">
-
-    <div class="cart-header">
-      <span class="cart-title">Login Akun</span>
-      <button class="close-btn" onclick="closeLogin()">✕</button>
-    </div>
-
-    <div style="padding-top:1rem;">
-
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:.85rem;color:var(--muted);">
-          Email
-        </label>
-
-        <input 
-          type="email"
-          id="login-email"
-          placeholder="Masukkan email"
-          style="
-            width:100%;
-            padding:.85rem 1rem;
-            border:1px solid var(--border);
-            border-radius:12px;
-            margin-top:6px;
-            font-family:inherit;
-            outline:none;
-          "
+        <!-- CART OVERLAY -->
+        <div
+            class="overlay"
+            id="cart-overlay"
+            onclick="handleOverlayClick(event)"
         >
-      </div>
+            <div class="cart-panel">
+                <div class="cart-header">
+                    <span class="cart-title">Keranjang Belanja</span>
+                    <button class="close-btn" onclick="closeCart()">✕</button>
+                </div>
+                <div id="cart-content"></div>
+            </div>
+        </div>
 
-      <div style="margin-bottom:1.5rem;">
-        <label style="font-size:.85rem;color:var(--muted);">
-          Password
-        </label>
-
-        <input 
-          type="password"
-          id="login-password"
-          placeholder="Masukkan password"
-          style="
-            width:100%;
-            padding:.85rem 1rem;
-            border:1px solid var(--border);
-            border-radius:12px;
-            margin-top:6px;
-            font-family:inherit;
-            outline:none;
-          "
+        <!-- LOGIN MODAL -->
+        <div
+            class="overlay"
+            id="login-overlay"
+            onclick="closeLoginOverlay(event)"
         >
-      </div>
+            <div
+                class="cart-panel"
+                style="
+                    max-width: 420px;
+                    height: auto;
+                    border-radius: 20px;
+                    margin: auto;
+                "
+            >
+                <div class="cart-header">
+                    <span class="cart-title">Login Akun</span>
+                    <button class="close-btn" onclick="closeLogin()">✕</button>
+                </div>
 
-      <button class="checkout-btn" onclick="loginUser()">
-        Login
-      </button>
+                <div style="padding-top: 1rem">
+                    <div style="margin-bottom: 1rem">
+                        <label style="font-size: 0.85rem; color: var(--muted)">
+                            Email
+                        </label>
 
-    </div>
+                        <input
+                            type="email"
+                            id="login-email"
+                            placeholder="Masukkan email"
+                            style="
+                                width: 100%;
+                                padding: 0.85rem 1rem;
+                                border: 1px solid var(--border);
+                                border-radius: 12px;
+                                margin-top: 6px;
+                                font-family: inherit;
+                                outline: none;
+                            "
+                        />
+                    </div>
 
-  </div>
-</div>
+                    <div style="margin-bottom: 1.5rem">
+                        <label style="font-size: 0.85rem; color: var(--muted)">
+                            Password
+                        </label>
 
-<!-- PAYMENT MODAL -->
-<div class="overlay" id="payment-overlay" onclick="closePaymentOverlay(event)">
-  
-  <div class="cart-panel" style="
-    max-width:520px;
-    height:auto;
-    border-radius:20px;
-    margin:auto;
-  ">
+                        <input
+                            type="password"
+                            id="login-password"
+                            placeholder="Masukkan password"
+                            style="
+                                width: 100%;
+                                padding: 0.85rem 1rem;
+                                border: 1px solid var(--border);
+                                border-radius: 12px;
+                                margin-top: 6px;
+                                font-family: inherit;
+                                outline: none;
+                            "
+                        />
+                    </div>
 
-    <div class="cart-header">
-      <span class="cart-title">Pembayaran</span>
-      <button class="close-btn" onclick="closePayment()">✕</button>
-    </div>
+                    <button class="checkout-btn" onclick="loginUser()">
+                        Login
+                    </button>
+                </div>
+            </div>
+        </div>
 
-    <div id="payment-content"></div>
+        <!-- PAYMENT MODAL -->
+        <div
+            class="overlay"
+            id="payment-overlay"
+            onclick="closePaymentOverlay(event)"
+        >
+            <div
+                class="cart-panel"
+                style="
+                    max-width: 520px;
+                    height: auto;
+                    border-radius: 20px;
+                    margin: auto;
+                "
+            >
+                <div class="cart-header">
+                    <span class="cart-title">Pembayaran</span>
+                    <button class="close-btn" onclick="closePayment()">
+                        ✕
+                    </button>
+                </div>
 
-  </div>
-</div>
+                <div id="payment-content"></div>
+            </div>
+        </div>
 
-<!-- PAYMENT PROOF MODAL -->
-<div class="overlay" id="proof-overlay" onclick="closeProofOverlay(event)">
-  
-  <div class="cart-panel" style="
-    max-width:520px;
-    height:auto;
-    border-radius:20px;
-    margin:auto;
-  ">
+        <!-- PAYMENT PROOF MODAL -->
+        <div
+            class="overlay"
+            id="proof-overlay"
+            onclick="closeProofOverlay(event)"
+        >
+            <div
+                class="cart-panel"
+                style="
+                    max-width: 520px;
+                    height: auto;
+                    border-radius: 20px;
+                    margin: auto;
+                "
+            >
+                <div class="cart-header">
+                    <span class="cart-title">Bukti Pembayaran</span>
+                    <button class="close-btn" onclick="closeProof()">✕</button>
+                </div>
 
-    <div class="cart-header">
-      <span class="cart-title">Bukti Pembayaran</span>
-      <button class="close-btn" onclick="closeProof()">✕</button>
-    </div>
+                <div id="proof-content"></div>
+            </div>
+        </div>
 
-    <div id="proof-content"></div>
+        <!-- INVOICE MODAL -->
+        <div
+            class="overlay"
+            id="invoice-overlay"
+            onclick="closeInvoiceOverlay(event)"
+        >
+            <div
+                class="cart-panel"
+                style="
+                    max-width: 620px;
+                    height: auto;
+                    border-radius: 20px;
+                    margin: auto;
+                "
+            >
+                <div class="cart-header">
+                    <span class="cart-title">Invoice Pembayaran</span>
+                    <button class="close-btn" onclick="closeInvoice()">
+                        ✕
+                    </button>
+                </div>
 
-  </div>
-</div>
+                <div id="invoice-content"></div>
+            </div>
+        </div>
 
-<!-- INVOICE MODAL -->
-<div class="overlay" id="invoice-overlay" onclick="closeInvoiceOverlay(event)">
-  
-  <div class="cart-panel" style="
-    max-width:620px;
-    height:auto;
-    border-radius:20px;
-    margin:auto;
-  ">
+        <!-- TOAST -->
+        <div
+            class="overlay"
+            id="product-modal"
+            onclick="closeProductModal(event)"
+        >
+            <div
+                class="cart-panel"
+                style="
+                    max-width: 500px;
+                    height: auto;
+                    border-radius: 20px;
+                    margin: auto;
+                "
+            >
+                <div class="cart-header">
+                    <span class="cart-title">Detail Produk</span>
+                    <button class="close-btn" onclick="hideProductModal()">
+                        ✕
+                    </button>
+                </div>
 
-    <div class="cart-header">
-      <span class="cart-title">Invoice Pembayaran</span>
-      <button class="close-btn" onclick="closeInvoice()">✕</button>
-    </div>
+                <div id="product-detail-content"></div>
+            </div>
+        </div>
 
-    <div id="invoice-content"></div>
+        <div class="toast" id="toast">
+            <span class="toast-dot"></span>
+            <span id="toast-msg">Produk ditambahkan!</span>
+        </div>
 
-  </div>
-</div>
+        <!-- FOOTER -->
+        <footer>
+            <p><strong>BeningKomputer</strong> © 2026</p>
+        </footer>
 
-<!-- TOAST -->
-<div class="overlay" id="product-modal" onclick="closeProductModal(event)">
-  <div class="cart-panel" style="max-width:500px;height:auto;border-radius:20px;margin:auto;">
-    
-    <div class="cart-header">
-      <span class="cart-title">Detail Produk</span>
-      <button class="close-btn" onclick="hideProductModal()">✕</button>
-    </div>
+        <script>
+            const PRODUCTS = [
+                {
+                    id: 1,
+                    name: "Laptop Gaming",
+                    cat: "laptop",
+                    emoji: "📱",
+                    price: 4599000,
+                    oldPrice: 5299000,
+                    rating: 4.8,
+                    reviews: 312,
+                    badge: "sale",
+                    desc: "Laptop gaming performa tinggi dengan processor terbaru dan VGA dedicated.",
+                },
+                {
+                    id: 2,
+                    name: "Earbuds Wireless TWS",
+                    cat: "laptop",
+                    emoji: "🎧",
+                    price: 299000,
+                    oldPrice: null,
+                    rating: 4.5,
+                    reviews: 188,
+                    badge: "new",
+                },
+                {
+                    id: 3,
+                    name: 'Laptop Ultrabook 14"',
+                    cat: "laptop",
+                    emoji: "💻",
+                    price: 9200000,
+                    oldPrice: 10500000,
+                    rating: 4.7,
+                    reviews: 95,
+                    badge: "sale",
+                },
+                {
+                    id: 4,
+                    name: "Smartwatch Series 5",
+                    cat: "laptop",
+                    emoji: "⌚",
+                    price: 1250000,
+                    oldPrice: null,
+                    rating: 4.3,
+                    reviews: 240,
+                    badge: null,
+                },
+                {
+                    id: 5,
+                    name: "aksesoris",
+                    cat: "aksesoris",
+                    emoji: "👗",
+                    price: 185000,
+                    oldPrice: 249000,
+                    rating: 4.9,
+                    reviews: 507,
+                    badge: "sale",
+                },
+                {
+                    id: 6,
+                    name: "aksesoris",
+                    cat: "aksesoris",
+                    emoji: "👟",
+                    price: 349000,
+                    oldPrice: null,
+                    rating: 4.6,
+                    reviews: 183,
+                    badge: "new",
+                },
+                {
+                    id: 7,
+                    name: "komponen komputer",
+                    cat: "komponen komputer",
+                    emoji: "👜",
+                    price: 125000,
+                    oldPrice: null,
+                    rating: 4.4,
+                    reviews: 91,
+                    badge: null,
+                },
+                {
+                    id: 8,
+                    name: "printer",
+                    cat: "printer",
+                    emoji: "👕",
+                    price: 89000,
+                    oldPrice: 110000,
+                    rating: 4.5,
+                    reviews: 622,
+                    badge: "sale",
+                },
+                {
+                    id: 9,
+                    name: "microphone",
+                    cat: "aksesoris",
+                    emoji: "🥘",
+                    price: 75000,
+                    oldPrice: null,
+                    rating: 5.0,
+                    reviews: 1204,
+                    badge: "new",
+                },
+                {
+                    id: 10,
+                    name: "komponen komputer",
+                    cat: "komponen komputer",
+                    emoji: "🌶️",
+                    price: 35000,
+                    oldPrice: null,
+                    rating: 4.8,
+                    reviews: 445,
+                    badge: null,
+                },
+                {
+                    id: 11,
+                    name: "laptop",
+                    cat: "laptop",
+                    emoji: "☕",
+                    price: 120000,
+                    oldPrice: 150000,
+                    rating: 4.7,
+                    reviews: 330,
+                    badge: "sale",
+                },
+                {
+                    id: 12,
+                    name: "prosesor",
+                    cat: "komponen komputer",
+                    emoji: "💡",
+                    price: 55000,
+                    oldPrice: null,
+                    rating: 4.3,
+                    reviews: 78,
+                    badge: "new",
+                },
+                {
+                    id: 13,
+                    name: "hdd",
+                    cat: "komponen komputer",
+                    emoji: "📚",
+                    price: 650000,
+                    oldPrice: 780000,
+                    rating: 4.6,
+                    reviews: 52,
+                    badge: "sale",
+                },
+                {
+                    id: 14,
+                    name: "ram",
+                    cat: "komponen komputer",
+                    emoji: "🍽️",
+                    price: 210000,
+                    oldPrice: null,
+                    rating: 4.5,
+                    reviews: 166,
+                    badge: null,
+                },
+            ];
 
-    <div id="product-detail-content"></div>
+            let cart = [];
+            let activeFilter = "semua";
+            let searchQuery = "";
 
-  </div>
-</div>
+            let paymentData = {};
 
-<div class="toast" id="toast">
-  <span class="toast-dot"></span>
-  <span id="toast-msg">Produk ditambahkan!</span>
-</div>
+            function formatRp(n) {
+                return "Rp " + n.toLocaleString("id-ID");
+            }
 
-<!-- FOOTER -->
-<footer>
-  <p> <strong>BeningKomputer</strong> © 2026</p>
-</footer>
+            function stars(r) {
+                const full = Math.floor(r),
+                    half = r % 1 >= 0.5;
+                return (
+                    "★".repeat(full) +
+                    (half ? "½" : "") +
+                    "☆".repeat(5 - full - (half ? 1 : 0))
+                );
+            }
 
-<script>
-const PRODUCTS = [
-  { id:1, name:'Laptop Gaming', cat:'laptop', emoji:'📱', price:4599000, oldPrice:5299000, rating:4.8, reviews:312, badge:'sale', desc:'Laptop gaming performa tinggi dengan processor terbaru dan VGA dedicated.' },
-  { id:2, name:'Earbuds Wireless TWS', cat:'laptop', emoji:'🎧', price:299000, oldPrice:null, rating:4.5, reviews:188, badge:'new' },
-  { id:3, name:'Laptop Ultrabook 14"', cat:'laptop', emoji:'💻', price:9200000, oldPrice:10500000, rating:4.7, reviews:95, badge:'sale' },
-  { id:4, name:'Smartwatch Series 5', cat:'laptop', emoji:'⌚', price:1250000, oldPrice:null, rating:4.3, reviews:240, badge:null },
-  { id:5, name:'aksesoris', cat:'aksesoris', emoji:'👗', price:185000, oldPrice:249000, rating:4.9, reviews:507, badge:'sale' },
-  { id:6, name:'aksesoris', cat:'aksesoris', emoji:'👟', price:349000, oldPrice:null, rating:4.6, reviews:183, badge:'new' },
-  { id:7, name:'komponen komputer', cat:'komponen komputer', emoji:'👜', price:125000, oldPrice:null, rating:4.4, reviews:91, badge:null },
-  { id:8, name:'printer', cat:'printer', emoji:'👕', price:89000, oldPrice:110000, rating:4.5, reviews:622, badge:'sale' },
-  { id:9, name:'microphone', cat:'aksesoris', emoji:'🥘', price:75000, oldPrice:null, rating:5.0, reviews:1204, badge:'new' },
-  { id:10, name:'komponen komputer', cat:'komponen komputer', emoji:'🌶️', price:35000, oldPrice:null, rating:4.8, reviews:445, badge:null },
-  { id:11, name:'laptop', cat:'laptop', emoji:'☕', price:120000, oldPrice:150000, rating:4.7, reviews:330, badge:'sale' },
-  { id:12, name:'prosesor', cat:'komponen komputer', emoji:'💡', price:55000, oldPrice:null, rating:4.3, reviews:78, badge:'new' },
-  { id:13, name:'hdd', cat:'komponen komputer', emoji:'📚', price:650000, oldPrice:780000, rating:4.6, reviews:52, badge:'sale' },
-  { id:14, name:'ram', cat:'komponen komputer', emoji:'🍽️', price:210000, oldPrice:null, rating:4.5, reviews:166, badge:null },
-];
+            function renderProducts() {
+                let items = PRODUCTS.filter((p) => {
+                    const matchCat =
+                        activeFilter === "semua" || p.cat === activeFilter;
+                    const matchSearch = p.name
+                        .toLowerCase()
+                        .includes(searchQuery.toLowerCase());
+                    return matchCat && matchSearch;
+                });
 
-let cart = [];
-let activeFilter = 'semua';
-let searchQuery = '';
+                const grid = document.getElementById("products-grid");
+                document.getElementById("product-count").textContent =
+                    items.length + " produk";
 
-let paymentData = {};
+                if (items.length === 0) {
+                    grid.innerHTML =
+                        '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">Produk tidak ditemukan 😔</div>';
+                    return;
+                }
 
-function formatRp(n) {
-  return 'Rp ' + n.toLocaleString('id-ID');
-}
-
-function stars(r) {
-  const full = Math.floor(r), half = r % 1 >= 0.5;
-  return '★'.repeat(full) + (half ? '½' : '') + '☆'.repeat(5 - full - (half ? 1 : 0));
-}
-
-function renderProducts() {
-  let items = PRODUCTS.filter(p => {
-    const matchCat = activeFilter === 'semua' || p.cat === activeFilter;
-    const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchCat && matchSearch;
-  });
-
-  const grid = document.getElementById('products-grid');
-  document.getElementById('product-count').textContent = items.length + ' produk';
-
-  if (items.length === 0) {
-    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--muted)">Produk tidak ditemukan 😔</div>';
-    return;
-  }
-
-  grid.innerHTML = items.map(p => `
+                grid.innerHTML = items
+                    .map(
+                        (p) => `
    <div class="product-card" onclick="showProductDetail(${p.id})">
       <div class="product-img" style="font-size:3.5rem;">
         ${p.emoji}
-        ${p.badge ? `<span class="product-badge ${p.badge}">${p.badge === 'sale' ? 'SALE' : 'BARU'}</span>` : ''}
+        ${p.badge ? `<span class="product-badge ${p.badge}">${p.badge === "sale" ? "SALE" : "BARU"}</span>` : ""}
       </div>
       <div class="product-info">
         <div class="product-cat">${p.cat}</div>
         <div class="product-name">${p.name}</div>
         <div class="product-rating">
-          <span class="stars">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))}</span>
+          <span class="stars">${"★".repeat(Math.floor(p.rating))}${"☆".repeat(5 - Math.floor(p.rating))}</span>
           <span class="rating-text">${p.rating} (${p.reviews})</span>
         </div>
         <div class="product-footer">
           <div>
             <span class="product-price">${formatRp(p.price)}</span>
-            ${p.oldPrice ? `<span class="product-price-old">${formatRp(p.oldPrice)}</span>` : ''}
+            ${p.oldPrice ? `<span class="product-price-old">${formatRp(p.oldPrice)}</span>` : ""}
           </div>
           <button class="add-btn" onclick="addToCart(${p.id})" title="Tambah ke keranjang">+</button>
         </div>
       </div>
     </div>
-  `).join('');
-}
+  `,
+                    )
+                    .join("");
+            }
 
-function filterProducts(cat, btn) {
-  activeFilter = cat;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderProducts();
-}
+            function filterProducts(cat, btn) {
+                activeFilter = cat;
+                document
+                    .querySelectorAll(".filter-btn")
+                    .forEach((b) => b.classList.remove("active"));
+                btn.classList.add("active");
+                renderProducts();
+            }
 
-function searchProducts(q) {
-  searchQuery = q;
-  renderProducts();
-}
+            function searchProducts(q) {
+                searchQuery = q;
+                renderProducts();
+            }
 
-function addToCart(id) {
-  const product = PRODUCTS.find(p => p.id === id);
-  const existing = cart.find(i => i.id === id);
-  if (existing) existing.qty++;
-  else cart.push({ ...product, qty: 1 });
-  updateCartCount();
-  showToast('🛒 ' + product.name + ' ditambahkan!');
-}
+            function addToCart(id) {
+                const product = PRODUCTS.find((p) => p.id === id);
+                const existing = cart.find((i) => i.id === id);
+                if (existing) existing.qty++;
+                else cart.push({ ...product, qty: 1 });
+                updateCartCount();
+                showToast("🛒 " + product.name + " ditambahkan!");
+            }
 
-function removeFromCart(id) {
-  cart = cart.filter(i => i.id !== id);
-  updateCartCount();
-  renderCart();
-}
+            function removeFromCart(id) {
+                cart = cart.filter((i) => i.id !== id);
+                updateCartCount();
+                renderCart();
+            }
 
-function changeQty(id, delta) {
-  const item = cart.find(i => i.id === id);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) removeFromCart(id);
-  else renderCart();
-  updateCartCount();
-}
+            function changeQty(id, delta) {
+                const item = cart.find((i) => i.id === id);
+                if (!item) return;
+                item.qty += delta;
+                if (item.qty <= 0) removeFromCart(id);
+                else renderCart();
+                updateCartCount();
+            }
 
-function updateCartCount() {
-  const total = cart.reduce((s, i) => s + i.qty, 0);
-  document.getElementById('cart-count').textContent = total;
-}
+            function updateCartCount() {
+                const total = cart.reduce((s, i) => s + i.qty, 0);
+                document.getElementById("cart-count").textContent = total;
+            }
 
-function renderCart() {
-  const el = document.getElementById('cart-content');
-  if (cart.length === 0) {
-    el.innerHTML = '<div class="cart-empty">🛒<br><br>Keranjang masih kosong.<br>Yuk belanja dulu!</div>';
-    return;
-  }
-  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const ongkir = 20000;
-  const total = subtotal + ongkir;
+            function renderCart() {
+                const el = document.getElementById("cart-content");
+                if (cart.length === 0) {
+                    el.innerHTML =
+                        '<div class="cart-empty">🛒<br><br>Keranjang masih kosong.<br>Yuk belanja dulu!</div>';
+                    return;
+                }
+                const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+                const ongkir = 20000;
+                const total = subtotal + ongkir;
 
-  el.innerHTML = `
+                el.innerHTML = `
     <div class="cart-items">
-      ${cart.map(item => `
+      ${cart
+          .map(
+              (item) => `
         <div class="cart-item">
           <div class="cart-item-emoji">${item.emoji}</div>
           <div class="cart-item-info">
@@ -622,7 +1205,9 @@ function renderCart() {
             </div>
           </div>
         </div>
-      `).join('')}
+      `,
+          )
+          .join("")}
     </div>
     <div class="cart-summary">
       <div class="cart-row"><span>Subtotal</span><span>${formatRp(subtotal)}</span></div>
@@ -631,13 +1216,15 @@ function renderCart() {
       <button class="checkout-btn" onclick="checkout()">Lanjut ke Pembayaran →</button>
     </div>
   `;
-}
-function showProductDetail(id) {
-  const product = PRODUCTS.find(p => p.id === id);
+            }
+            function showProductDetail(id) {
+                const product = PRODUCTS.find((p) => p.id === id);
 
-  const content = document.getElementById('product-detail-content');
+                const content = document.getElementById(
+                    "product-detail-content",
+                );
 
-  content.innerHTML = `
+                content.innerHTML = `
     <div style="text-align:center;padding:1rem 0;">
       
       <div style="font-size:5rem;margin-bottom:1rem;">
@@ -666,17 +1253,17 @@ function showProductDetail(id) {
         </span>
 
         ${
-          product.oldPrice
-            ? `<div style="color:var(--muted);text-decoration:line-through;">
+            product.oldPrice
+                ? `<div style="color:var(--muted);text-decoration:line-through;">
                 ${formatRp(product.oldPrice)}
                </div>`
-            : ''
+                : ""
         }
       </div>
 
       <div style="margin-bottom:1rem;color:#E8B84B;">
-        ${'★'.repeat(Math.floor(product.rating))}
-        ${'☆'.repeat(5 - Math.floor(product.rating))}
+        ${"★".repeat(Math.floor(product.rating))}
+        ${"☆".repeat(5 - Math.floor(product.rating))}
         <span style="color:var(--muted);font-size:.9rem;">
           (${product.reviews} review)
         </span>
@@ -700,56 +1287,61 @@ function showProductDetail(id) {
     </div>
   `;
 
-  document.getElementById('product-modal').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
+                document.getElementById("product-modal").classList.add("open");
+                document.body.style.overflow = "hidden";
+            }
 
-function hideProductModal() {
-  document.getElementById('product-modal').classList.remove('open');
-  document.body.style.overflow = '';
-}
+            function hideProductModal() {
+                document
+                    .getElementById("product-modal")
+                    .classList.remove("open");
+                document.body.style.overflow = "";
+            }
 
-function closeProductModal(e) {
-  if (e.target.id === 'product-modal') {
-    hideProductModal();
-  }
-}
+            function closeProductModal(e) {
+                if (e.target.id === "product-modal") {
+                    hideProductModal();
+                }
+            }
 
-function openCart() {
-  renderCart();
-  document.getElementById('cart-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
+            function openCart() {
+                renderCart();
+                document.getElementById("cart-overlay").classList.add("open");
+                document.body.style.overflow = "hidden";
+            }
 
-function closeCart() {
-  document.getElementById('cart-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
+            function closeCart() {
+                document
+                    .getElementById("cart-overlay")
+                    .classList.remove("open");
+                document.body.style.overflow = "";
+            }
 
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('cart-overlay')) closeCart();
-}
+            function handleOverlayClick(e) {
+                if (e.target === document.getElementById("cart-overlay"))
+                    closeCart();
+            }
 
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  document.getElementById('toast-msg').textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
+            function showToast(msg) {
+                const t = document.getElementById("toast");
+                document.getElementById("toast-msg").textContent = msg;
+                t.classList.add("show");
+                setTimeout(() => t.classList.remove("show"), 2500);
+            }
 
-function checkout() {
-  if (cart.length === 0) {
-    showToast('🛒 Keranjang masih kosong');
-    return;
-  }
+            function checkout() {
+                if (cart.length === 0) {
+                    showToast("🛒 Keranjang masih kosong");
+                    return;
+                }
 
-  closeCart();
+                closeCart();
 
-  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const ongkir = 20000;
-  const total = subtotal + ongkir;
+                const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+                const ongkir = 20000;
+                const total = subtotal + ongkir;
 
-  document.getElementById('payment-content').innerHTML = `
+                document.getElementById("payment-content").innerHTML = `
     
     <div style="padding-top:1rem;">
 
@@ -865,22 +1457,23 @@ function checkout() {
     </div>
   `;
 
-  document.getElementById('payment-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-let currentUser = null;
+                document
+                    .getElementById("payment-overlay")
+                    .classList.add("open");
+                document.body.style.overflow = "hidden";
+            }
+            let currentUser = null;
 
-function previewPaymentProof(event) {
+            function previewPaymentProof(event) {
+                const file = event.target.files[0];
 
-  const file = event.target.files[0];
+                if (!file) return;
 
-  if (!file) return;
+                const reader = new FileReader();
 
-  const reader = new FileReader();
-
-  reader.onload = function(e) {
-
-    document.getElementById('payment-proof-preview').innerHTML = `
+                reader.onload = function (e) {
+                    document.getElementById("payment-proof-preview").innerHTML =
+                        `
       
       <div style="
   margin-bottom:1.5rem;
@@ -912,98 +1505,103 @@ function previewPaymentProof(event) {
 
       </div>
     `;
-  };
+                };
 
-  reader.readAsDataURL(file);
-}
+                reader.readAsDataURL(file);
+            }
 
-function openLogin() {
-  document.getElementById('login-overlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
+            function openLogin() {
+                document.getElementById("login-overlay").classList.add("open");
+                document.body.style.overflow = "hidden";
+            }
 
-function closeLogin() {
-  document.getElementById('login-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
+            function closeLogin() {
+                document
+                    .getElementById("login-overlay")
+                    .classList.remove("open");
+                document.body.style.overflow = "";
+            }
 
-function closeLoginOverlay(e) {
-  if (e.target.id === 'login-overlay') {
-    closeLogin();
-  }
-}
+            function closeLoginOverlay(e) {
+                if (e.target.id === "login-overlay") {
+                    closeLogin();
+                }
+            }
 
-function loginUser() {
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
+            function loginUser() {
+                const email = document.getElementById("login-email").value;
+                const password =
+                    document.getElementById("login-password").value;
 
-  if (!email || !password) {
-    showToast('⚠️ Email dan password wajib diisi');
-    return;
-  }
+                if (!email || !password) {
+                    showToast("⚠️ Email dan password wajib diisi");
+                    return;
+                }
 
-  currentUser = {
-    email
-  };
+                currentUser = {
+                    email,
+                };
 
-  closeLogin();
+                closeLogin();
 
-  showToast('✅ Login berhasil');
+                showToast("✅ Login berhasil");
 
-  updateNavbarUser();
-}
+                updateNavbarUser();
+            }
 
-function updateNavbarUser() {
-  const loginBtn = document.querySelector('.login-btn');
+            function updateNavbarUser() {
+                const loginBtn = document.querySelector(".login-btn");
 
-  if (currentUser) {
-    loginBtn.innerHTML = '👋 ' + currentUser.email.split('@')[0];
-    loginBtn.onclick = logoutUser;
-  } else {
-    loginBtn.innerHTML = 'Login';
-    loginBtn.onclick = openLogin;
-  }
-}
+                if (currentUser) {
+                    loginBtn.innerHTML =
+                        "👋 " + currentUser.email.split("@")[0];
+                    loginBtn.onclick = logoutUser;
+                } else {
+                    loginBtn.innerHTML = "Login";
+                    loginBtn.onclick = openLogin;
+                }
+            }
 
-function logoutUser() {
-  currentUser = null;
+            function logoutUser() {
+                currentUser = null;
 
-  updateNavbarUser();
+                updateNavbarUser();
 
-  showToast('👋 Berhasil logout');
-}
+                showToast("👋 Berhasil logout");
+            }
 
-function closePayment() {
-  document.getElementById('payment-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
+            function closePayment() {
+                document
+                    .getElementById("payment-overlay")
+                    .classList.remove("open");
+                document.body.style.overflow = "";
+            }
 
-function closePaymentOverlay(e) {
-  if (e.target.id === 'payment-overlay') {
-    closePayment();
-  }
-}
+            function closePaymentOverlay(e) {
+                if (e.target.id === "payment-overlay") {
+                    closePayment();
+                }
+            }
 
-function showPaymentProof() {
+            function showPaymentProof() {
+                const name = document.getElementById("pay-name").value;
+                const phone = document.getElementById("pay-phone").value;
+                const address = document.getElementById("pay-address").value;
+                const method = document.getElementById("pay-method").value;
 
-  const name = document.getElementById('pay-name').value;
-  const phone = document.getElementById('pay-phone').value;
-  const address = document.getElementById('pay-address').value;
-  const method = document.getElementById('pay-method').value;
+                if (!name || !phone || !address) {
+                    showToast("⚠️ Lengkapi data pembayaran");
+                    return;
+                }
 
-  if (!name || !phone || !address) {
-    showToast('⚠️ Lengkapi data pembayaran');
-    return;
-  }
+                paymentData = {
+                    name,
+                    phone,
+                    address,
+                    method,
+                };
 
-  paymentData = {
-    name,
-    phone,
-    address,
-    method
-  };
-
-  document.getElementById('proof-content').innerHTML = `
+                document.getElementById("proof-content").innerHTML = `
     
     <div style="
   padding-top:1rem;
@@ -1038,9 +1636,7 @@ function showPaymentProof() {
         <div class="cart-row">
           <span>Total</span>
           <span>
-            ${formatRp(
-              cart.reduce((s, i) => s + i.price * i.qty, 0) + 20000
-            )}
+            ${formatRp(cart.reduce((s, i) => s + i.price * i.qty, 0) + 20000)}
           </span>
         </div>
 
@@ -1150,45 +1746,48 @@ function showPaymentProof() {
     </div>
   `;
 
-  closePayment();
+                closePayment();
 
-  document.getElementById('proof-overlay').classList.add('open');
-}
+                document.getElementById("proof-overlay").classList.add("open");
+            }
 
-function closeProof() {
-  document.getElementById('proof-overlay').classList.remove('open');
-}
+            function closeProof() {
+                document
+                    .getElementById("proof-overlay")
+                    .classList.remove("open");
+            }
 
-function closeProofOverlay(e) {
-  if (e.target.id === 'proof-overlay') {
-    closeProof();
-  }
-}
+            function closeProofOverlay(e) {
+                if (e.target.id === "proof-overlay") {
+                    closeProof();
+                }
+            }
 
-function processPayment() {
-const proofFile = document.getElementById('payment-proof-file').files[0];
+            function processPayment() {
+                const proofFile =
+                    document.getElementById("payment-proof-file").files[0];
 
-if (!proofFile) {
-  showToast('⚠️ Upload bukti pembayaran terlebih dahulu');
-  return;
-}
-const name = paymentData.name;
-const phone = paymentData.phone;
-const address = paymentData.address;
-const method = paymentData.method;
+                if (!proofFile) {
+                    showToast("⚠️ Upload bukti pembayaran terlebih dahulu");
+                    return;
+                }
+                const name = paymentData.name;
+                const phone = paymentData.phone;
+                const address = paymentData.address;
+                const method = paymentData.method;
 
-  if (!name || !phone || !address) {
-    showToast('⚠️ Lengkapi data pembayaran');
-    return;
-  }
+                if (!name || !phone || !address) {
+                    showToast("⚠️ Lengkapi data pembayaran");
+                    return;
+                }
 
-  const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-  const ongkir = 20000;
-  const total = subtotal + ongkir;
+                const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+                const ongkir = 20000;
+                const total = subtotal + ongkir;
 
-  const invoiceId = 'INV-' + Math.floor(Math.random() * 999999);
+                const invoiceId = "INV-" + Math.floor(Math.random() * 999999);
 
-  document.getElementById('invoice-content').innerHTML = `
+                document.getElementById("invoice-content").innerHTML = `
     
     <div style="padding-top:1rem;">
 
@@ -1231,12 +1830,16 @@ const method = paymentData.method;
         margin-top:1rem;
       ">
 
-        ${cart.map(item => `
+        ${cart
+            .map(
+                (item) => `
           <div class="cart-row">
             <span>${item.name} x${item.qty}</span>
             <span>${formatRp(item.price * item.qty)}</span>
           </div>
-        `).join('')}
+        `,
+            )
+            .join("")}
 
         <div class="cart-row">
           <span>Ongkir</span>
@@ -1257,36 +1860,40 @@ const method = paymentData.method;
     </div>
   `;
 
-closeProof();
+                closeProof();
 
-  document.getElementById('invoice-overlay').classList.add('open');
+                document
+                    .getElementById("invoice-overlay")
+                    .classList.add("open");
 
-  cart = [];
-  updateCartCount();
-}
+                cart = [];
+                updateCartCount();
+            }
 
-function closeInvoice() {
-  document.getElementById('invoice-overlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
+            function closeInvoice() {
+                document
+                    .getElementById("invoice-overlay")
+                    .classList.remove("open");
+                document.body.style.overflow = "";
+            }
 
-function closeInvoiceOverlay(e) {
-  if (e.target.id === 'invoice-overlay') {
-    closeInvoice();
-  }
-}
+            function closeInvoiceOverlay(e) {
+                if (e.target.id === "invoice-overlay") {
+                    closeInvoice();
+                }
+            }
 
-function copyRekening() {
+            function copyRekening() {
+                const rekening =
+                    document.getElementById("rekening-number").innerText;
 
-  const rekening = document.getElementById('rekening-number').innerText;
+                navigator.clipboard.writeText(rekening);
 
-  navigator.clipboard.writeText(rekening);
+                showToast("✅ Nomor rekening berhasil disalin");
+            }
 
-  showToast('✅ Nomor rekening berhasil disalin');
-}
-
-// Init
-renderProducts();
-</script>
-</body>
+            // Init
+            renderProducts();
+        </script>
+    </body>
 </html>
