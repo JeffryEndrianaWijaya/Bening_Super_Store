@@ -37,9 +37,16 @@
                   </li>
 
                   <li class="nav-item">
-                      <a href="{{ route('category.index') }}" class="nav-link {{ $isActive('category') }}">
+                      <a href="{{ route('kategori.index') }}" class="nav-link {{ $isActive('category') }}">
                           <i class="nav-icon fas fa-list"></i>
                           <p>Kategori</p>
+                      </a>
+                  </li>
+
+                  <li class="nav-item">
+                      <a href="{{ route('produk.index') }}" class="nav-link {{ $isActive('produk') }}">
+                          <i class="nav-icon fas fa-box"></i>
+                          <p>Produk</p>
                       </a>
                   </li>
 

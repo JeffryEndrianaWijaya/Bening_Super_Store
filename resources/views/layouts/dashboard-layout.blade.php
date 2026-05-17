@@ -5,15 +5,27 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    {{-- @include('components.head') --}}
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}" />
+
+    <!-- IonIcons (External CDN - Tidak perlu asset) -->
+    <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" />
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}" />
+
+    <!-- Google Font: Source Sans Pro (External CDN - Tidak perlu asset) -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet" />
     <title>{{ $title ?? 'Dashboard' }}</title>
 
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    {{-- Tempat CSS tambahan disisipkan oleh view anak --}}
+    @stack('css')
 </head>
 
 <body class="hold-transition sidebar-mini">
-    <x-side-bar :activeMenu="$activeMenu ?? ''" />
+<div class="wrapper">
     <x-navbar :title="$title ?? 'Dashboard'" :activeMenu="$activeMenu ?? ''" />
+    <x-side-bar :activeMenu="$activeMenu ?? ''" />
+
     <main class="content-wrapper">
         <div class="content-header">
             <div class="container-fluid">
@@ -30,10 +42,21 @@
                 </div>
             </div>
         </div>
+
+        {{-- Slot Konten Utama --}}
         {{ $slot }}
     </main>
+
     <x-footer />
-    {{-- @include('components.script') --}}
+</div>
+
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
+    <script src="{{ asset('plugins/chart.js/Chart.min.js') }}"></script>
+    <script src="{{ asset('dist/js/demo.js') }}"></script>
+    <script src="{{ asset('dist/js/pages/dashboard3.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>

@@ -10,14 +10,4 @@ class DashboardController extends Controller
     {
         return view('pages.Dashboard.Dashboard');
     }
-
-    public function userDashboard()
-    {
-        return view('pages.UserDashboard.UserDashboard');
-    }
-
-    public function categoryDashboard()
-    {
-        return view('pages.CategoryDashboard.CategoryDashboard');
-    }
 }

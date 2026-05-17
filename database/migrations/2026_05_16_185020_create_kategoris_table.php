@@ -11,8 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kategoris', function (Blueprint $table) {
-            $table->id();
+        Schema::create('kategori', function (Blueprint $table) {
+            $table->id('id_kategori'); 
+            $table->string('nama_kategori');
+            $table->softDeletes(); 
             $table->timestamps();
         });
     }
@@ -22,6 +24,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kategoris');
+        // Menyinkronkan nama tabel saat di-drop
+        Schema::dropIfExists('kategori');
     }
 };
