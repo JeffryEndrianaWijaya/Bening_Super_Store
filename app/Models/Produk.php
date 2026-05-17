@@ -26,4 +26,14 @@ class Produk extends Model
     {
         return $this->belongsTo(Kategori::class, 'id_kategori', 'id_kategori');
     }
+
+    public function stoks()
+    {
+        return $this->hasMany(Stok::class, 'id_produk', 'id_produk');
+    }
+
+    public function getTotalStokAttribute()
+    {
+        return $this->stoks()->sum('jumlah_stok');
+    }
 }

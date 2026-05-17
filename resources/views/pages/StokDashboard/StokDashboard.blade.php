@@ -1,6 +1,5 @@
-<x-dashboard-layout title="Produk" activeMenu="produk">
+<x-dashboard-layout title="Stok Produk" activeMenu="stok">
     @push('css')
-        <link rel="stylesheet" href="{{ asset('plugins/summernote/summernote-bs4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
         <link rel="stylesheet" href="{{ asset('plugins/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css') }}">
@@ -10,33 +9,11 @@
 
     <div class="content">
 
-        {{-- Alert Penanganan Error & Success --}}
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <h5><i class="icon fas fa-check"></i> Sukses!</h5>
-                {{ session('success') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <h5><i class="icon fas fa-ban"></i> Gagal!</h5>
-                {{ session('error') }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        @endif
-
-
-        @include('pages.ProdukDashboard.AddProduk')
+        @include('pages.StokDashboard.AddStok')
 
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">Daftar Produk</h3>
+                <h3 class="card-title">Riwayat Stok Produk</h3>
             </div>
 
             <div class="card-body">
@@ -44,47 +21,45 @@
                     <thead>
                         <tr>
                             <th width="7%">No</th>
-                            <th>Nama Produk</th>
-                            <th>Harga</th>
-                            <th>Kategori</th>
-                            <th>Total Stok</th>
+                            <th>Produk</th>
+                            <th>Jumlah Stok Masuk</th>
+                            <th>Tanggal Masuk</th>
                             <th width="20%">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($produks as $index => $item)
+                        @forelse($stoks as $index => $item)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
-                                <td>{{ $item->nama_produk }}</td>
-                                <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
-                                <td>{{ $item->kategori ? $item->kategori->nama_kategori : '-' }}</td>
-                                <td>{{ number_format($item->total_stok, 0, ',', '.') }}</td>
+                                <td>{{ $item->produk ? $item->produk->nama_produk : '-' }}</td>
+                                <td>{{ number_format($item->jumlah_stok, 0, ',', '.') }}</td>
+                                <td>{{ $item->created_at ? $item->created_at->translatedFormat('l, d F Y H:i') : '-' }}</td>
                                 <td>
-                                    <form action="{{ route('produk.destroy', $item->id_produk) }}" method="POST"
+                                    <form action="{{ route('stok.destroy', $item->id_stok) }}" method="POST"
                                         class="d-inline form-delete">
                                         @csrf
                                         @method('DELETE')
 
                                         <a href="#" class="btn btn-sm btn-info mr-1" data-toggle="modal"
-                                            data-target="#modalDetailProduk-{{ $item->id_produk }}">
-                                            <i class="fas fa-eye"></i> Detail
+                                            data-target="#modalDetailStok-{{ $item->id_stok }}">
+                                            <i class="fas fa-eye"></i>
                                         </a>
                                         <a href="#" class="btn btn-sm btn-warning mr-1" data-toggle="modal"
-                                            data-target="#modalEditProduk-{{ $item->id_produk }}">
-                                            <i class="fas fa-edit"></i> Edit
+                                            data-target="#modalEditStok-{{ $item->id_stok }}">
+                                            <i class="fas fa-edit"></i>
                                         </a>
                                         <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> Hapus
+                                            <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
 
-                                    @include('pages.ProdukDashboard.DetailProduk', ['item' => $item])
-                                    @include('pages.ProdukDashboard.EditProduk', ['item' => $item, 'kategoris' => $kategoris])
+                                    @include('pages.StokDashboard.DetailStok', ['item' => $item])
+                                    @include('pages.StokDashboard.EditStok', ['item' => $item, 'produks' => $produks])
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center">Belum ada data produk.</td>
+                                <td colspan="5" class="text-center">Belum ada riwayat stok.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -106,8 +81,8 @@
                     e.preventDefault();
                     var form = this;
                     Swal.fire({
-                        title: 'Apakah Anda yakin?',
-                        text: "Data produk ini akan dihapus permanen!",
+                        title: 'Hapus Riwayat?',
+                        text: "Data riwayat stok ini akan dihapus permanen!",
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#d33',
@@ -124,20 +99,7 @@
                 $("#example1").DataTable({
                     "responsive": true,
                     "autoWidth": false,
-                });
-
-                // Inisialisasi Summernote
-                $('.textarea').summernote({
-                    height: 200,
-                    toolbar: [
-                        ['style', ['style']],
-                        ['font', ['bold', 'underline', 'clear']],
-                        ['color', ['color']],
-                        ['para', ['ul', 'ol', 'paragraph']],
-                        ['table', ['table']],
-                        ['insert', ['link', 'picture', 'video']],
-                        ['view', ['fullscreen', 'codeview', 'help']]
-                    ]
+                    "order": [[ 3, "desc" ]] // Default urut berdasarkan tanggal terbaru
                 });
 
                 // Handle AJAX form submission
@@ -145,17 +107,16 @@
                     e.preventDefault();
                     var form = $(this);
                     var url = form.attr('action');
-                    var method = form.attr('method');
                     var formData = new FormData(this);
 
                     // Reset error states
                     form.find('.form-control').removeClass('is-invalid');
-                    form.find('.select2-selection').removeClass('border-danger'); // For select2
+                    form.find('.select2-selection').removeClass('border-danger');
                     form.find('.invalid-feedback').html('');
 
                     $.ajax({
                         url: url,
-                        method: 'POST', // Always POST for FormData, Laravel uses _method for PUT
+                        method: 'POST',
                         data: formData,
                         processData: false,
                         contentType: false,
@@ -164,10 +125,7 @@
                         },
                         success: function (response) {
                             if (response.success) {
-                                // Close all modals
                                 $('.modal').modal('hide');
-                                
-                                // Show success message
                                 Swal.fire({
                                     icon: 'success',
                                     title: 'Berhasil!',
@@ -175,7 +133,6 @@
                                     showConfirmButton: false,
                                     timer: 1500
                                 }).then(() => {
-                                    // Reload page to reflect changes
                                     window.location.reload();
                                 });
                             }
@@ -184,22 +141,14 @@
                             if (xhr.status === 422) {
                                 var errors = xhr.responseJSON.errors;
                                 $.each(errors, function (field, messages) {
-                                    // Find the input and add is-invalid class
                                     var input = form.find('[name="' + field + '"]');
                                     input.addClass('is-invalid');
                                     
-                                    // If it's summernote, we might need to target its container
-                                    if(input.hasClass('textarea')) {
-                                        input.next('.note-editor').addClass('is-invalid'); // Optional styling
-                                    }
-
-                                    // If it's select2
-                                    if(input.hasClass('select2-kategori')) {
+                                    if(input.hasClass('select2-produk')) {
                                         input.next('.select2-container').find('.select2-selection').addClass('border-danger');
                                     }
                                     
-                                    // Display error message
-                                    form.find('.error-' + field).html(messages[0]).show(); // Force show for select2
+                                    form.find('.error-' + field).html(messages[0]).show();
                                 });
                             } else {
                                 Swal.fire({
@@ -213,16 +162,15 @@
                 });
 
                 // Inisialisasi Select2
-                $('.select2-kategori').select2({
+                $('.select2-produk').select2({
                     theme: 'bootstrap4',
-                    tags: true, // Memungkinkan input teks bebas
-                    placeholder: "-- Pilih atau Ketik Kategori Baru --",
+                    placeholder: "-- Pilih Produk --",
                     allowClear: true
                 });
 
                 // Reset Select2 saat modal ditutup
                 $('.modal').on('hidden.bs.modal', function () {
-                    $(this).find('.select2-kategori').val('').trigger('change');
+                    $(this).find('.select2-produk').val('').trigger('change');
                     $(this).find('.form-control').removeClass('is-invalid');
                     $(this).find('.select2-selection').removeClass('border-danger');
                     $(this).find('.invalid-feedback').html('');

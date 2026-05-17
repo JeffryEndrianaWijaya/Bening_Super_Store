@@ -26,7 +26,7 @@ class ProdukRequest extends FormRequest
             'nama_produk' => 'required|string|max:255',
             'harga'       => 'required|numeric|min:0',
             'deskripsi'   => 'nullable|string',
-            'id_kategori' => 'required|exists:kategori,id_kategori',
+            'id_kategori' => 'required',
         ];
     }
 

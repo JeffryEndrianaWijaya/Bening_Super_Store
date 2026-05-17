@@ -32,8 +32,8 @@
             <div class="form-group">
                 <label for="id_kategori">Kategori</label>
                 <select name="id_kategori" id="id_kategori"
-                    class="form-control">
-                    <option value="">-- Pilih Kategori --</option>
+                    class="form-control select2-kategori" style="width: 100%;">
+                    <option value=""></option>
                     @foreach ($kategoris as $kategori)
                         <option value="{{ $kategori->id_kategori }}">
                             {{ $kategori->nama_kategori }}

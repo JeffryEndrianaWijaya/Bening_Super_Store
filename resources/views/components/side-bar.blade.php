@@ -37,18 +37,29 @@
                   </li>
 
                   <li class="nav-item">
-                      <a href="{{ route('kategori.index') }}" class="nav-link {{ $isActive('category') }}">
-                          <i class="nav-icon fas fa-list"></i>
-                          <p>Kategori</p>
-                      </a>
-                  </li>
-
-                  <li class="nav-item">
-                      <a href="{{ route('produk.index') }}" class="nav-link {{ $isActive('produk') }}">
-                          <i class="nav-icon fas fa-box"></i>
-                          <p>Produk</p>
-                      </a>
-                  </li>
+            <a href="{{ route('kategori.index') }}" class="nav-link {{ $activeMenu == 'category' ? 'active' : '' }}">
+                <i class="nav-icon fas fa-tags"></i>
+                <p>
+                    Kategori
+                </p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('produk.index') }}" class="nav-link {{ $activeMenu == 'produk' ? 'active' : '' }}">
+                <i class="nav-icon fas fa-box"></i>
+                <p>
+                    Produk
+                </p>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{{ route('stok.index') }}" class="nav-link {{ $activeMenu == 'stok' ? 'active' : '' }}">
+                <i class="nav-icon fas fa-cubes"></i>
+                <p>
+                    Stok Produk
+                </p>
+            </a>
+        </li>
 
                   <li class="nav-item">
                       <a href="pages/widgets.html" class="nav-link">
