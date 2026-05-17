@@ -60,6 +60,14 @@
                 </p>
             </a>
         </li>
+        <li class="nav-item">
+            <a href="{{ route('cuci_gudang.index') }}" class="nav-link {{ $activeMenu == 'cuci_gudang' ? 'active' : '' }}">
+                <i class="nav-icon fas fa-percentage"></i>
+                <p>
+                    Cuci Gudang
+                </p>
+            </a>
+        </li>
 
                   <li class="nav-item">
                       <a href="pages/widgets.html" class="nav-link">

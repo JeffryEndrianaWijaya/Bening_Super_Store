@@ -36,4 +36,9 @@ class Produk extends Model
     {
         return $this->stoks()->sum('jumlah_stok');
     }
+
+    public function cuci_gudangs()
+    {
+        return $this->hasMany(CuciGudang::class, 'id_produk', 'id_produk');
+    }
 }
