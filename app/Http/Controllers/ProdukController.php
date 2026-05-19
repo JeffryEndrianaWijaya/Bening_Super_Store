@@ -16,7 +16,7 @@ class ProdukController extends Controller
     public function index()
     {
         try {
-            $produks = Produk::with('kategori', 'images')->latest()->get();
+            $produks = Produk::with('kategori', 'images', 'stoks')->latest()->get();
             $kategoris = Kategori::all();
             
             return view('pages.ProdukDashboard.ProdukDashboard', compact('produks', 'kategoris'));

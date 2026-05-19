@@ -144,6 +144,7 @@ class CheckoutController extends Controller
                             });
                         } catch (\Exception $e) {
                             Log::error('Callback Stock Deduction Error: ' . $e->getMessage());
+                            $pesanan->update(['status' => 'waiting_stock']);
                         }
                     }
                 } elseif ($request->transaction_status == 'expire') {
@@ -168,10 +169,15 @@ class CheckoutController extends Controller
             $pesanan = Pesanan::where('order_id', $request->order_id)->first();
             if ($pesanan) {
                 if ($request->status === 'paid' && $pesanan->status !== 'paid') {
-                    DB::transaction(function () use ($pesanan) {
-                        $pesanan->decreaseStock();
-                        $pesanan->update(['status' => 'paid']);
-                    });
+                    try {
+                        DB::transaction(function () use ($pesanan) {
+                            $pesanan->decreaseStock();
+                            $pesanan->update(['status' => 'paid']);
+                        });
+                    } catch (\Exception $e) {
+                        $pesanan->update(['status' => 'waiting_stock']);
+                        return response()->json(['success' => false, 'message' => 'Stok habis, pesanan dialihkan ke status Menunggu Stok: ' . $e->getMessage()], 422);
+                    }
                 } else {
                     $pesanan->update(['status' => $request->status]);
                 }

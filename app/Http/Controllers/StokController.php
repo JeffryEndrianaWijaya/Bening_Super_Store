@@ -14,9 +14,10 @@ class StokController extends Controller
     public function index()
     {
         try {
-            $stoks = Stok::with('produk')->latest()->get();
-            $produks = Produk::all();
-            
+            // Only show positive (masuk) entries to admin — system deduction entries are hidden
+            $stoks  = Stok::with('produk')->where('jumlah_stok', '>', 0)->latest()->get();
+            $produks = Produk::with('stoks')->where('status', true)->get();
+
             return view('pages.StokDashboard.StokDashboard', compact('stoks', 'produks'));
         } catch (Exception $e) {
             Log::error('Gagal memuat halaman stok: ' . $e->getMessage());
@@ -24,21 +25,25 @@ class StokController extends Controller
         }
     }
 
+    /**
+     * Only allow ADDING new positive stock entries (stok masuk).
+     */
     public function store(StokRequest $request)
     {
         DB::beginTransaction();
         try {
             Stok::create([
                 'id_produk'   => $request->id_produk,
-                'jumlah_stok' => $request->jumlah_stok,
+                'jumlah_stok' => abs($request->jumlah_stok), // Always positive for admin input
+                'status'      => 'pending',
             ]);
 
             DB::commit();
 
             if ($request->ajax()) {
-                return response()->json(['success' => true, 'message' => 'Stok baru berhasil ditambahkan.']);
+                return response()->json(['success' => true, 'message' => 'Stok berhasil ditambahkan dan menunggu persetujuan.']);
             }
-            return redirect()->route('stok.index')->with('success', 'Stok baru berhasil ditambahkan.');
+            return redirect()->route('stok.index')->with('success', 'Stok berhasil ditambahkan dan menunggu persetujuan.');
         } catch (Exception $e) {
             DB::rollBack();
             Log::error('Gagal menyimpan stok: ' . $e->getMessage());
@@ -50,46 +55,52 @@ class StokController extends Controller
         }
     }
 
+    /**
+     * Editing individual stock ledger entries is DISABLED.
+     * Stock can only be added via store(), and deducted automatically by the payment system.
+     */
     public function update(StokRequest $request, string $id)
+    {
+        if ($request->ajax()) {
+            return response()->json(['success' => false, 'message' => 'Mengubah riwayat stok tidak diizinkan. Tambahkan catatan stok baru.'], 403);
+        }
+        return redirect()->route('stok.index')->with('error', 'Mengubah riwayat stok tidak diizinkan.');
+    }
+
+    public function approve($id)
     {
         DB::beginTransaction();
         try {
             $stok = Stok::findOrFail($id);
-            $stok->update([
-                'id_produk'   => $request->id_produk,
-                'jumlah_stok' => $request->jumlah_stok,
-            ]);
-
+            $stok->update(['status' => 'approved']);
             DB::commit();
 
-            if ($request->ajax()) {
-                return response()->json(['success' => true, 'message' => 'Data stok berhasil diperbarui.']);
-            }
-            return redirect()->route('stok.index')->with('success', 'Data stok berhasil diperbarui.');
+            return redirect()->route('stok.index')->with('success', 'Stok berhasil disetujui.');
         } catch (Exception $e) {
             DB::rollBack();
-            Log::error('Gagal memperbarui stok ID ' . $id . ': ' . $e->getMessage());
+            Log::error('Gagal menyetujui stok ID ' . $id . ': ' . $e->getMessage());
+            return redirect()->route('stok.index')->with('error', 'Gagal menyetujui stok.');
+        }
+    }
 
-            if ($request->ajax()) {
-                return response()->json(['success' => false, 'message' => 'Gagal memperbarui data stok. Silakan coba lagi.'], 500);
-            }
-            return redirect()->back()->withInput()->with('error', 'Gagal memperbarui data stok. Silakan coba lagi.');
+    public function cancel($id)
+    {
+        DB::beginTransaction();
+        try {
+            $stok = Stok::findOrFail($id);
+            $stok->update(['status' => 'cancelled']);
+            DB::commit();
+
+            return redirect()->route('stok.index')->with('success', 'Stok berhasil dibatalkan.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal membatalkan stok ID ' . $id . ': ' . $e->getMessage());
+            return redirect()->route('stok.index')->with('error', 'Gagal membatalkan stok.');
         }
     }
 
     public function destroy(string $id)
     {
-        DB::beginTransaction();
-        try {
-            $stok = Stok::findOrFail($id);
-            $stok->delete();
-
-            DB::commit();
-            return redirect()->route('stok.index')->with('success', 'Riwayat stok berhasil dihapus.');
-        } catch (Exception $e) {
-            DB::rollBack();
-            Log::error('Gagal menghapus stok ID ' . $id . ': ' . $e->getMessage());
-            return redirect()->route('stok.index')->with('error', 'Gagal menghapus riwayat stok.');
-        }
+        return redirect()->route('stok.index')->with('error', 'Menghapus riwayat stok tidak diizinkan. Catatan bersifat permanen.');
     }
 }

@@ -39,7 +39,11 @@ class PesananFrontController extends Controller
 
     public function simulasiBayar($id)
     {
-        $pesanan = Pesanan::where('user_id', auth()->id())->findOrFail($id);
+        if (!auth()->check() || auth()->user()->role !== 'admin') {
+            abort(403, 'Anda tidak memiliki akses untuk melunaskan pesanan ini.');
+        }
+
+        $pesanan = Pesanan::findOrFail($id);
 
         if ($pesanan->status === 'pending') {
             try {
@@ -47,9 +51,10 @@ class PesananFrontController extends Controller
                     $pesanan->decreaseStock();
                     $pesanan->update(['status' => 'paid']);
                 });
-                return redirect()->back()->with('success', 'Simulasi Berhasil! Pembayaran Anda telah ditandai LUNAS (Diproses).');
+                return redirect()->back()->with('success', 'Berhasil! Pembayaran telah ditandai LUNAS secara manual oleh Admin.');
             } catch (\Exception $e) {
-                return redirect()->back()->with('error', 'Gagal memproses pembayaran: ' . $e->getMessage());
+                $pesanan->update(['status' => 'waiting_stock']);
+                return redirect()->back()->with('error', 'Gagal memproses pembayaran (Stok Habis / Tidak Mencukupi). Status pesanan diubah menjadi Menunggu Stok. Detail error: ' . $e->getMessage());
             }
         }
 

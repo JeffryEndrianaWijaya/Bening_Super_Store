@@ -19,12 +19,15 @@
             <button id="pay-button" class="btn-primary-custom" style="padding:0.9rem 3rem; font-size:1.1rem; width:100%; max-width:320px; margin:0 auto 0.8rem; display:block;">
                 <i class="fas fa-lock" style="margin-right:0.4rem;"></i> Bayar Sekarang (Midtrans)
             </button>
-            <form action="{{ route('pesanan.simulasi_bayar', $pesanan->id_pesanan) }}" method="POST" style="width:100%; max-width:320px; margin:0 auto; display:block;">
-                @csrf
-                <button type="submit" class="btn-primary-custom" style="padding:0.9rem 3rem; font-size:1.1rem; width:100%; background:linear-gradient(135deg, #4ECDC4, #3baea6); border:none; box-shadow: 0 4px 15px rgba(78,205,196,0.3);">
-                    <i class="fas fa-magic" style="margin-right:0.4rem;"></i> Simulasikan Bayar Lunas (Testing)
-                </button>
-            </form>
+
+            @if(auth()->check() && auth()->user()->role === 'admin')
+                <form action="{{ route('pesanan.simulasi_bayar', $pesanan->id_pesanan) }}" method="POST" style="width:100%; max-width:320px; margin:0 auto 0.8rem; display:block;">
+                    @csrf
+                    <button type="submit" class="btn-primary-custom" style="padding:0.9rem 3rem; font-size:1.1rem; width:100%; background:linear-gradient(135deg, #4ECDC4, #3baea6); border:none; box-shadow: 0 4px 15px rgba(78,205,196,0.3);">
+                        <i class="fas fa-magic" style="margin-right:0.4rem;"></i> Lunaskan Langsung (Admin Only)
+                    </button>
+                </form>
+            @endif
 
             <p style="margin-top:1.5rem; color:var(--text-secondary); font-size:0.85rem;">
                 Pembayaran diproses secara aman melalui Midtrans.

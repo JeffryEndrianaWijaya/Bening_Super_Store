@@ -28,8 +28,10 @@
             <div class="carousel-inner" style="border-radius:16px 16px 0 0;">
                 @foreach ($images as $i => $img)
                     <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
-                        <img src="{{ asset('storage/' . $img->image_path) }}" alt="{{ $produk->nama_produk }}"
-                            style="width:100%; height:200px; object-fit:cover;">
+                        <a href="{{ route('shop.product.detail', $produk->id_produk) }}" style="display: block;">
+                            <img src="{{ asset('storage/' . $img->image_path) }}" alt="{{ $produk->nama_produk }}"
+                                style="width:100%; height:200px; object-fit:cover; cursor: pointer;">
+                        </a>
                     </div>
                 @endforeach
             </div>
@@ -45,45 +47,25 @@
             @endif
         </div>
     @else
-        <div class="product-img">
-            <i class="fas fa-box-open"></i>
-        </div>
+        <a href="{{ route('shop.product.detail', $produk->id_produk) }}" style="text-decoration: none; color: inherit; display: block;">
+            <div class="product-img" style="cursor: pointer;">
+                <i class="fas fa-box-open"></i>
+            </div>
+        </a>
     @endif
 
-    <div class="product-body">
-        <div class="product-category text-secondary">{{ $produk->kategori->nama_kategori ?? '-' }}</div>
-        <div class="product-name">{{ $produk->nama_produk }}</div>
-        <div class="product-price text-success">
-            @if ($diskon)
-                <span class="price-original text-danger">Rp {{ number_format($produk->harga, 0, ',', '.') }}</span>
-            @endif
-            Rp {{ number_format($hargaFinal, 0, ',', '.') }}
+    <a href="{{ route('shop.product.detail', $produk->id_produk) }}" style="text-decoration: none; color: inherit; display: block;">
+        <div class="product-body" style="cursor: pointer; padding: 1.2rem;">
+            <div class="product-category text-secondary" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.3rem;">{{ $produk->kategori->nama_kategori ?? '-' }}</div>
+            <div class="product-name text-white" style="font-weight: 700; font-size: 1.15rem; margin-bottom: 0.4rem; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='inherit'">
+                {{ $produk->nama_produk }}
+            </div>
+            <div class="product-price text-success" style="font-weight: 800; font-size: 1.1rem;">
+                @if ($diskon)
+                    <span class="price-original text-danger" style="text-decoration: line-through; font-size: 0.9rem; margin-right: 0.5rem; font-weight: 600;">Rp {{ number_format($produk->harga, 0, ',', '.') }}</span>
+                @endif
+                Rp {{ number_format($hargaFinal, 0, ',', '.') }}
+            </div>
         </div>
-        @auth
-            @if ($produk->total_stok <= 0)
-                <button type="button" class="btn-add-cart w-100 mt-2 rounded btn btn-secondary text-white font-weight-bold" style="background:#6c757d; border-color:#6c757d; cursor:not-allowed;" disabled>
-                    <i class="fas fa-ban" style="margin-right:0.3rem;"></i> Stok Habis
-                </button>
-            @else
-                <form action="{{ route('keranjang.store') }}" method="POST" class="form-add-cart">
-                    @csrf
-                    <input type="hidden" name="id_produk" value="{{ $produk->id_produk }}">
-                    <x-button color="primary" class="btn-add-cart w-100 mt-2 rounded" type="submit">
-                        <i class="fas fa-cart-plus" style="margin-right:0.3rem;"></i> Tambah ke Keranjang
-                    </x-button>
-                </form>
-            @endif
-        @else
-            @if ($produk->total_stok <= 0)
-                <button type="button" class="btn-add-cart w-100 mt-2 rounded btn btn-secondary text-white font-weight-bold" style="background:#6c757d; border-color:#6c757d; cursor:not-allowed;" disabled>
-                    <i class="fas fa-ban" style="margin-right:0.3rem;"></i> Stok Habis
-                </button>
-            @else
-                <x-button color="primary" class="btn-add-cart w-100 mt-2 rounded text-center d-block"
-                    style="text-decoration:none;" href="{{ route('login') }}">
-                    <i class="fas fa-sign-in-alt" style="margin-right:0.3rem;"></i> Login untuk Beli
-                </x-button>
-            @endif
-        @endauth
-    </div>
+    </a>
 </div>

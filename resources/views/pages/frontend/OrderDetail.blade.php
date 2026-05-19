@@ -23,6 +23,7 @@
                 $statusColor = match($pesanan->status) {
                     'paid' => '#4ECDC4',
                     'pending' => '#FFD93D',
+                    'waiting_stock' => '#fd7e14',
                     'shipped' => '#007BFF',
                     'completed' => '#28A745',
                     'expired' => '#A7A9BE',
@@ -32,6 +33,7 @@
                 $statusLabel = match($pesanan->status) {
                     'paid' => 'Diproses',
                     'pending' => 'Menunggu Pembayaran',
+                    'waiting_stock' => 'Menunggu Restock (Lunas)',
                     'shipped' => 'Dikirim',
                     'completed' => 'Diterima',
                     'expired' => 'Kadaluarsa',
@@ -55,7 +57,7 @@
             @if(!in_array($pesanan->status, ['expired', 'cancelled']))
                 @php
                     $currentStep = 1;
-                    if ($pesanan->status === 'paid') {
+                    if ($pesanan->status === 'paid' || $pesanan->status === 'waiting_stock') {
                         $currentStep = 2;
                     } elseif ($pesanan->status === 'shipped') {
                         $currentStep = 3;
@@ -119,20 +121,91 @@
 
             {{-- Items --}}
             @foreach($pesanan->details as $detail)
-                <div style="display:flex; align-items:center; gap:1rem; padding:0.8rem 0; border-bottom:1px solid var(--border-glass);">
-                    <div style="width:45px; height:45px; border-radius:10px; background:linear-gradient(135deg, rgba(108,99,255,0.15), rgba(78,205,196,0.15)); display:flex; align-items:center; justify-content:center; color:var(--primary); flex-shrink:0;">
-                        <i class="fas fa-box-open"></i>
-                    </div>
-                    <div style="flex:1;">
-                        <div style="font-weight:600; font-size:0.95rem;">{{ $detail->nama_produk }}</div>
-                        <div style="font-size:0.8rem; color:var(--text-secondary);">
-                            {{ $detail->qty }}x @ Rp {{ number_format($detail->harga_satuan, 0, ',', '.') }}
-                            @if($detail->diskon_persen > 0)
-                                <span style="color:var(--secondary);">(-{{ $detail->diskon_persen }}%)</span>
-                            @endif
+                <div style="border-bottom:1px solid var(--border-glass); padding: 1.2rem 0;">
+                    <div style="display:flex; align-items:center; gap:1rem;">
+                        <div style="width:45px; height:45px; border-radius:10px; background:linear-gradient(135deg, rgba(108,99,255,0.15), rgba(78,205,196,0.15)); display:flex; align-items:center; justify-content:center; color:var(--primary); flex-shrink:0;">
+                            <i class="fas fa-box-open"></i>
                         </div>
+                        <div style="flex:1;">
+                            <div style="font-weight:600; font-size:0.95rem;">
+                                <a href="{{ route('shop.product.detail', $detail->id_produk) }}" style="color: inherit; text-decoration: none; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='inherit'">
+                                    {{ $detail->nama_produk }}
+                                </a>
+                            </div>
+                            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top: 0.2rem;">
+                                {{ $detail->qty }}x @ Rp {{ number_format($detail->harga_satuan, 0, ',', '.') }}
+                                @if($detail->diskon_persen > 0)
+                                    <span style="color:var(--secondary);">(-{{ $detail->diskon_persen }}%)</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div style="font-weight:600; color:var(--text-primary);">Rp {{ number_format($detail->subtotal, 0, ',', '.') }}</div>
                     </div>
-                    <div style="font-weight:600; color:var(--text-primary);">Rp {{ number_format($detail->subtotal, 0, ',', '.') }}</div>
+
+                    {{-- Review System when completed --}}
+                    @if($pesanan->status === 'completed')
+                        @php
+                            $hasReviewed = \App\Models\Ulasan::where('id_user', auth()->id())
+                                ->where('id_produk', $detail->id_produk)
+                                ->first();
+                        @endphp
+
+                        @if($hasReviewed)
+                            <div style="margin-top: 0.8rem; padding: 0.8rem 1rem; background: rgba(78, 205, 196, 0.08); border-radius: 8px; border: 1px solid rgba(78, 205, 196, 0.2); font-size: 0.85rem;">
+                                <div style="font-weight: 700; color: #3baea6; display: flex; align-items: center; gap: 0.3rem; margin-bottom: 0.2rem;">
+                                    <i class="fas fa-check-circle"></i> Anda telah memberikan ulasan:
+                                </div>
+                                <div style="color: #FFD93D; margin-bottom: 0.3rem;">
+                                    @for($star = 1; $star <= 5; $star++)
+                                        <i class="{{ $star <= $hasReviewed->rating ? 'fas' : 'far' }} fa-star"></i>
+                                    @endfor
+                                </div>
+                                @if($hasReviewed->komentar)
+                                    <div style="font-style: italic; color: var(--text-secondary);">
+                                        "{{ $hasReviewed->komentar }}"
+                                    </div>
+                                @endif
+                                @if($hasReviewed->balasan)
+                                    <div style="margin-top: 0.6rem; padding-left: 0.8rem; border-left: 2px solid var(--primary); font-size: 0.8rem;">
+                                        <strong style="color: var(--primary);">Balasan Admin:</strong>
+                                        <span style="color: var(--text-primary);">"{{ $hasReviewed->balasan }}"</span>
+                                    </div>
+                                @endif
+                            </div>
+                        @else
+                            <div style="margin-top: 0.8rem; padding: 1rem; background: rgba(108, 99, 255, 0.05); border-radius: 10px; border: 1px dashed rgba(108, 99, 255, 0.3);">
+                                <form action="{{ route('ulasan.store') }}" method="POST">
+                                    @csrf
+                                    <input type="hidden" name="id_produk" value="{{ $detail->id_produk }}">
+                                    
+                                    <div style="font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; color: var(--primary);">
+                                        <i class="fas fa-pen-alt" style="margin-right: 0.2rem;"></i> Tulis Ulasan Produk
+                                    </div>
+                                    
+                                    <!-- Star Rating Input -->
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.6rem;">
+                                        <span style="font-size: 0.8rem; color: var(--text-secondary);">Rating:</span>
+                                        <div class="star-rating-input" style="display: flex; gap: 0.25rem;">
+                                            @for($star = 1; $star <= 5; $star++)
+                                                <label style="cursor: pointer; margin: 0; display: flex; align-items: center;">
+                                                    <input type="radio" name="rating" value="{{ $star }}" required style="display: none;" class="star-radio-{{ $detail->id_produk }}">
+                                                    <i class="far fa-star star-icon-{{ $detail->id_produk }}-{{ $star }}" style="font-size: 1.1rem; color: #FFD93D;" onclick="selectStars({{ $detail->id_produk }}, {{ $star }})"></i>
+                                                </label>
+                                            @endfor
+                                        </div>
+                                    </div>
+                                    
+                                    <textarea name="komentar" placeholder="Bagikan pendapat Anda tentang produk ini..." style="width: 100%; min-height: 50px; background: rgba(255,255,255,0.05); border: 1px solid var(--border-glass); border-radius: 8px; color: var(--text-primary); padding: 0.5rem; font-size: 0.85rem; outline: none; transition: border 0.3s; resize: vertical;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='var(--border-glass)'"></textarea>
+                                    
+                                    <div style="text-align: right; margin-top: 0.5rem;">
+                                        <button type="submit" class="btn-primary-custom" style="padding: 0.4rem 1.2rem; font-size: 0.8rem; border-radius: 20px;">
+                                            Kirim Ulasan
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        @endif
+                    @endif
                 </div>
             @endforeach
 
@@ -148,12 +221,14 @@
                     <button id="pay-button" class="btn-primary-custom" style="padding:0.8rem 2.5rem; font-size:1rem; width:100%; max-width:320px;">
                         <i class="fas fa-credit-card" style="margin-right:0.3rem;"></i> Bayar Sekarang (Midtrans)
                     </button>
-                    <form action="{{ route('pesanan.simulasi_bayar', $pesanan->id_pesanan) }}" method="POST" style="width:100%; max-width:320px;">
-                        @csrf
-                        <button type="submit" class="btn-primary-custom" style="padding:0.8rem 2.5rem; font-size:1rem; width:100%; background:linear-gradient(135deg, #4ECDC4, #3baea6); border:none; box-shadow: 0 4px 15px rgba(78,205,196,0.3);">
-                            <i class="fas fa-magic" style="margin-right:0.3rem;"></i> Simulasikan Bayar Lunas (Testing)
-                        </button>
-                    </form>
+                    @if(auth()->check() && auth()->user()->role === 'admin')
+                        <form action="{{ route('pesanan.simulasi_bayar', $pesanan->id_pesanan) }}" method="POST" style="width:100%; max-width:320px;">
+                            @csrf
+                            <button type="submit" class="btn-primary-custom" style="padding:0.8rem 2.5rem; font-size:1rem; width:100%; background:linear-gradient(135deg, #4ECDC4, #3baea6); border:none; box-shadow: 0 4px 15px rgba(78,205,196,0.3);">
+                                <i class="fas fa-magic" style="margin-right:0.3rem;"></i> Lunaskan Langsung (Admin Only)
+                            </button>
+                        </form>
+                    @endif
                 </div>
             @endif
 
@@ -217,4 +292,32 @@
         </script>
         @endpush
     @endif
+
+    @push('scripts')
+    <script>
+        function selectStars(productId, rating) {
+            // Select the radio input
+            const radios = document.querySelectorAll('.star-radio-' + productId);
+            radios.forEach(radio => {
+                if (parseInt(radio.value) === rating) {
+                    radio.checked = true;
+                }
+            });
+            
+            // Update visual icons
+            for (let i = 1; i <= 5; i++) {
+                const starIcon = document.querySelector('.star-icon-' + productId + '-' + i);
+                if (starIcon) {
+                    if (i <= rating) {
+                        starIcon.classList.remove('far');
+                        starIcon.classList.add('fas');
+                    } else {
+                        starIcon.classList.remove('fas');
+                        starIcon.classList.add('far');
+                    }
+                }
+            }
+        }
+    </script>
+    @endpush
 </x-customer-layout>

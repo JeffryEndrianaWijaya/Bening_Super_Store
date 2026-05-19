@@ -36,18 +36,25 @@
                                 <td>
                                     @php
                                         $badgeClass = 'secondary';
-                                        if ($item->status == 'paid')
+                                        $statusText = ucfirst($item->status);
+                                        $style = '';
+                                        if ($item->status == 'paid') {
                                             $badgeClass = 'success';
-                                        elseif ($item->status == 'pending')
+                                        } elseif ($item->status == 'pending') {
                                             $badgeClass = 'warning';
-                                        elseif ($item->status == 'shipped')
+                                        } elseif ($item->status == 'waiting_stock') {
+                                            $badgeClass = 'warning';
+                                            $style = 'background-color: #fd7e14; color: white;';
+                                            $statusText = 'Waiting Stock / Approve';
+                                        } elseif ($item->status == 'shipped') {
                                             $badgeClass = 'info';
-                                        elseif ($item->status == 'completed')
+                                        } elseif ($item->status == 'completed') {
                                             $badgeClass = 'primary';
-                                        elseif ($item->status == 'cancelled' || $item->status == 'expired')
+                                        } elseif ($item->status == 'cancelled' || $item->status == 'expired') {
                                             $badgeClass = 'danger';
+                                        }
                                     @endphp
-                                    <span class="badge badge-{{ $badgeClass }}">{{ ucfirst($item->status) }}</span>
+                                    <span class="badge badge-{{ $badgeClass }}" style="{{ $style }}">{{ $statusText }}</span>
                                 </td>
                                 <td>{{ $item->created_at->format('d M Y H:i') }}</td>
                                 <td>

@@ -85,7 +85,44 @@ class KeranjangController extends Controller
         $item->update(['qty' => $request->qty]);
 
         if ($request->ajax()) {
-            return response()->json(['success' => true]);
+            $now = Carbon::now();
+            $items = Keranjang::with('produk')->where('user_id', auth()->id())->get();
+            $diskonAktif = CuciGudang::where('waktu_mulai', '<=', $now)
+                ->where('waktu_selesai', '>=', $now)
+                ->get()
+                ->keyBy('id_produk');
+
+            $grandTotal = 0;
+            $hasStockIssue = false;
+            $updatedSubtotal = 0;
+
+            foreach ($items as $cartItem) {
+                $diskon = $diskonAktif->get($cartItem->id_produk);
+                $hargaAsli = $cartItem->produk->harga;
+                $hargaFinal = $diskon ? $hargaAsli * (1 - $diskon->persen_diskon / 100) : $hargaAsli;
+                $sub = $hargaFinal * $cartItem->qty;
+                $grandTotal += $sub;
+
+                if ($cartItem->id_keranjang == $item->id_keranjang) {
+                    $updatedSubtotal = $sub;
+                }
+
+                if ($cartItem->produk->total_stok < $cartItem->qty) {
+                    $hasStockIssue = true;
+                }
+            }
+
+            $cartCount = $items->sum('qty');
+
+            return response()->json([
+                'success' => true,
+                'qty' => $item->qty,
+                'subtotal' => 'Rp ' . number_format($updatedSubtotal, 0, ',', '.'),
+                'grand_total' => 'Rp ' . number_format($grandTotal, 0, ',', '.'),
+                'cart_count' => $cartCount,
+                'has_stock_issue' => $hasStockIssue,
+                'total_stok' => $item->produk->total_stok
+            ]);
         }
         return redirect()->route('keranjang.index');
     }

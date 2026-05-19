@@ -27,13 +27,20 @@
                                 <strong>Status Saat Ini:</strong> 
                                 @php
                                     $badgeClass = 'secondary';
+                                    $statusText = ucfirst($item->status);
+                                    $style = '';
                                     if ($item->status == 'paid') $badgeClass = 'success';
                                     elseif ($item->status == 'pending') $badgeClass = 'warning';
+                                    elseif ($item->status == 'waiting_stock') {
+                                        $badgeClass = 'warning';
+                                        $style = 'background-color: #fd7e14; color: white;';
+                                        $statusText = 'Waiting Stock / Approve';
+                                    }
                                     elseif ($item->status == 'shipped') $badgeClass = 'info';
                                     elseif ($item->status == 'completed') $badgeClass = 'primary';
                                     elseif ($item->status == 'cancelled' || $item->status == 'expired') $badgeClass = 'danger';
                                 @endphp
-                                <span class="badge badge-{{ $badgeClass }} px-2 py-1">{{ ucfirst($item->status) }}</span>
+                                <span class="badge badge-{{ $badgeClass }} px-2 py-1" style="{{ $style }}">{{ $statusText }}</span>
                             </div>
                         </div>
                     </div>
@@ -86,6 +93,26 @@
 
                 <hr class="my-4">
                 
+                @if($item->status == 'pending')
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle mr-1"></i> Jika pelanggan membayar langsung di tempat, silakan ubah status menjadi <strong>Paid (Lunas - Bayar di Tempat / COD)</strong> di bawah ini untuk melunaskan pesanan secara instan.
+                    </div>
+                @elseif($item->status == 'waiting_stock')
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-triangle mr-2"></i><strong>Stok Tidak Mencukupi!</strong></h5>
+                        <p class="mb-2">Pembayaran untuk pesanan ini telah diterima (via Midtrans), namun stok produk saat itu tidak mencukupi.</p>
+                        <p class="mb-0">Silakan tambahkan stok produk terlebih dahulu melalui menu <strong>Stok</strong>, kemudian tekan tombol di bawah ini untuk memvalidasi dan memotong stok.</p>
+                    </div>
+                    <form action="{{ route('pesanan_admin.update', $item->id_pesanan) }}" method="POST" class="mb-3">
+                        @csrf
+                        @method('PUT')
+                        <input type="hidden" name="status" value="paid">
+                        <button type="submit" class="btn btn-success btn-lg btn-block">
+                            <i class="fas fa-check-circle mr-1"></i> Approve & Potong Stok
+                        </button>
+                    </form>
+                @endif
+
                 <!-- Action Form to Change Status -->
                 <div class="card card-outline card-secondary mb-0">
                     <div class="card-header p-2">
@@ -100,7 +127,8 @@
                                 <div class="col-sm-6">
                                     <select name="status" class="form-control select2">
                                         <option value="pending" {{ $item->status == 'pending' ? 'selected' : '' }}>Pending (Menunggu Pembayaran)</option>
-                                        <option value="paid" {{ $item->status == 'paid' ? 'selected' : '' }}>Paid (Sudah Dibayar)</option>
+                                        <option value="waiting_stock" {{ $item->status == 'waiting_stock' ? 'selected' : '' }}>Waiting Stock (Menunggu Stok / Approve)</option>
+                                        <option value="paid" {{ $item->status == 'paid' ? 'selected' : '' }}>Paid (Lunas / Berhasil)</option>
                                         <option value="shipped" {{ $item->status == 'shipped' ? 'selected' : '' }}>Shipped (Sedang Dikirim)</option>
                                         <option value="completed" {{ $item->status == 'completed' ? 'selected' : '' }}>Completed (Pesanan Selesai)</option>
                                         <option value="cancelled" {{ $item->status == 'cancelled' ? 'selected' : '' }}>Cancelled (Dibatalkan)</option>

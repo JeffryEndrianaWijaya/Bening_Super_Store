@@ -12,9 +12,11 @@
             <a href="{{ route('pesanan.index') }}" class="{{ request()->routeIs('pesanan.*') ? 'active' : '' }}">Pesanan
                 Saya</a>
         @endauth
-        @if (auth()->user()->role == 'admin')
-            <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard.*') ? 'active' : '' }}">Dashboard</a>
-        @endif
+        @auth
+            @if (auth()->user()->role == 'admin')
+                <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard.*') ? 'active' : '' }}">Dashboard</a>
+            @endif
+        @endauth
     </div>
     <div class="nav-actions">
         {{-- Theme Toggle --}}
@@ -44,6 +46,6 @@
         <x-button color="primary" class="btn-primary-custom rounded" href="{{ route('register') }}">
             Daftar
         </x-button>
-        @endguest
+        @endauth
     </div>
 </nav>

@@ -15,6 +15,7 @@ class Stok extends Model
     protected $fillable = [
         'id_produk',
         'jumlah_stok',
+        'status',
     ];
 
     public function produk()

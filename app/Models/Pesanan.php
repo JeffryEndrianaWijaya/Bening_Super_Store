@@ -15,6 +15,11 @@ class Pesanan extends Model
         'total_harga',
         'status',
         'snap_token',
+        'stock_deducted',
+    ];
+
+    protected $casts = [
+        'stock_deducted' => 'boolean',
     ];
 
     public function user()
@@ -28,10 +33,20 @@ class Pesanan extends Model
     }
 
     /**
-     * Decrease product stock for all details in the order
+     * Verify stock is sufficient before payment transition and mark as deducted.
      */
     public function decreaseStock()
     {
+        // Re-fetch with lock to prevent race condition
+        $self = static::where('id_pesanan', $this->id_pesanan)
+            ->lockForUpdate()
+            ->first();
+
+        // If stock already deducted, skip silently (idempotent)
+        if ($self && $self->stock_deducted) {
+            return;
+        }
+
         foreach ($this->details as $detail) {
             $produk = $detail->produk;
             if (!$produk) {
@@ -39,15 +54,14 @@ class Pesanan extends Model
             }
 
             $currentStock = $produk->total_stok;
+
             if ($currentStock < $detail->qty) {
                 throw new \Exception("Stok untuk produk '{$detail->nama_produk}' tidak mencukupi (Tersisa: {$currentStock}, Diminta: {$detail->qty}).");
             }
-
-            // Deduct stock by creating a new entry with a negative quantity
-            \App\Models\Stok::create([
-                'id_produk' => $detail->id_produk,
-                'jumlah_stok' => -$detail->qty
-            ]);
         }
+
+        // Mark this order as stock-deducted
+        static::where('id_pesanan', $this->id_pesanan)
+            ->update(['stock_deducted' => true]);
     }
 }

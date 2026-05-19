@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 // ===== FRONTEND (Pelanggan) =====
 Route::get('/', [FrontendController::class, 'home'])->name('home');
 Route::get('/category/{id?}', [FrontendController::class, 'category'])->name('shop.category.index');
+Route::get('/produk/{id}', [FrontendController::class, 'productDetail'])->name('shop.product.detail');
 
 // Auth
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -34,12 +35,17 @@ Route::middleware('auth')->group(function () {
     Route::delete('/keranjang/{id}', [KeranjangController::class, 'destroy'])->name('keranjang.destroy');
 
     Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+    Route::get('/checkout', function () {
+        return redirect()->route('keranjang.index');
+    });
     Route::post('/pesanan/update-status-after-pay', [CheckoutController::class, 'updateStatusAfterPay'])->name('pesanan.update_status_after_pay');
 
     Route::get('/pesanan', [PesananFrontController::class, 'index'])->name('pesanan.index');
     Route::get('/pesanan/{id}', [PesananFrontController::class, 'show'])->name('pesanan.show');
     Route::post('/pesanan/{id}/konfirmasi', [PesananFrontController::class, 'konfirmasi'])->name('pesanan.konfirmasi');
     Route::post('/pesanan/{id}/simulasi-bayar', [PesananFrontController::class, 'simulasiBayar'])->name('pesanan.simulasi_bayar');
+
+    Route::post('/ulasan', [FrontendController::class, 'storeReview'])->name('ulasan.store');
 });
 
 // Midtrans Callback (no auth needed)
@@ -51,6 +57,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('/kategori', KategoriController::class);
     Route::resource('/produk', ProdukController::class);
     Route::resource('/stok', StokController::class);
+    Route::put('/stok/{id}/approve', [StokController::class, 'approve'])->name('stok.approve');
+    Route::put('/stok/{id}/cancel', [StokController::class, 'cancel'])->name('stok.cancel');
     Route::resource('/cuci_gudang', CuciGudangController::class);
     Route::resource('/pesanan_admin', PesananAdminController::class);
     Route::resource('/user_admin', UserAdminController::class);

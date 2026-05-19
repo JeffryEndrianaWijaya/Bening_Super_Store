@@ -68,16 +68,23 @@ class PesananAdminController extends Controller
     {
         try {
             $request->validate([
-                'status' => 'required|in:pending,paid,expired,cancelled,shipped,completed',
+                'status' => 'required|in:pending,paid,expired,cancelled,shipped,completed,waiting_stock',
             ]);
 
             $pesanan = Pesanan::findOrFail($id);
 
             if ($request->status === 'paid' && $pesanan->status !== 'paid') {
-                \Illuminate\Support\Facades\DB::transaction(function () use ($pesanan) {
-                    $pesanan->decreaseStock();
-                    $pesanan->update(['status' => 'paid']);
-                });
+                try {
+                    \Illuminate\Support\Facades\DB::transaction(function () use ($pesanan) {
+                        $pesanan->decreaseStock();
+                        $pesanan->update(['status' => 'paid']);
+                    });
+                } catch (Exception $e) {
+                    if ($pesanan->status !== 'waiting_stock') {
+                        $pesanan->update(['status' => 'waiting_stock']);
+                    }
+                    throw $e;
+                }
             } else {
                 $pesanan->update([
                     'status' => $request->status

@@ -35,7 +35,14 @@ class Produk extends Model
 
     public function getTotalStokAttribute()
     {
-        return $this->stoks()->sum('jumlah_stok');
+        $stokMasuk = $this->stoks()->where('status', 'approved')->where('jumlah_stok', '>', 0)->sum('jumlah_stok');
+        
+        $terjual = \App\Models\PesananDetail::where('id_produk', $this->id_produk)
+            ->whereHas('pesanan', function($q) {
+                $q->where('stock_deducted', true);
+            })->sum('qty');
+            
+        return max(0, $stokMasuk - $terjual);
     }
 
     public function cuci_gudangs()
@@ -46,5 +53,10 @@ class Produk extends Model
     public function images()
     {
         return $this->hasMany(ProdukImage::class, 'id_produk', 'id_produk')->orderBy('sort_order');
+    }
+
+    public function ulasans()
+    {
+        return $this->hasMany(Ulasan::class, 'id_produk', 'id_produk');
     }
 }

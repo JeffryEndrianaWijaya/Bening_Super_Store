@@ -15,6 +15,7 @@
                     $statusColor = match($pesanan->status) {
                         'paid' => '#4ECDC4',
                         'pending' => '#FFD93D',
+                        'waiting_stock' => '#fd7e14',
                         'shipped' => '#007BFF',
                         'completed' => '#28A745',
                         'expired' => '#A7A9BE',
@@ -24,6 +25,7 @@
                     $statusLabel = match($pesanan->status) {
                         'paid' => 'Diproses',
                         'pending' => 'Menunggu Pembayaran',
+                        'waiting_stock' => 'Menunggu Restock (Lunas)',
                         'shipped' => 'Dikirim',
                         'completed' => 'Diterima',
                         'expired' => 'Kadaluarsa',

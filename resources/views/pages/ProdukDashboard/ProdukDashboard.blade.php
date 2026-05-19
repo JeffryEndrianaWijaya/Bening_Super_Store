@@ -168,7 +168,22 @@
                                 <td>{{ $item->nama_produk }}</td>
                                 <td>Rp {{ number_format($item->harga, 0, ',', '.') }}</td>
                                 <td>{{ $item->kategori ? $item->kategori->nama_kategori : '-' }}</td>
-                                <td>{{ number_format($item->total_stok, 0, ',', '.') }}</td>
+                                <td class="text-center">
+                                    @php $sisa = $item->total_stok; @endphp
+                                    @if($sisa <= 0)
+                                        <span class="badge badge-danger px-2 py-1" style="font-size:0.85rem;">
+                                            <i class="fas fa-ban mr-1"></i>Habis
+                                        </span>
+                                    @elseif($sisa <= 5)
+                                        <span class="badge badge-warning px-2 py-1 text-white" style="font-size:0.85rem;">
+                                            <i class="fas fa-exclamation-triangle mr-1"></i>{{ $sisa }} unit
+                                        </span>
+                                    @else
+                                        <span class="badge badge-success px-2 py-1" style="font-size:0.85rem;">
+                                            {{ number_format($sisa, 0, ',', '.') }} unit
+                                        </span>
+                                    @endif
+                                </td>
                                 <td>
                                     <span class="badge {{ $item->status ? 'badge-success' : 'badge-secondary' }}">
                                         {{ $item->status ? 'Aktif' : 'Tidak Aktif' }}
