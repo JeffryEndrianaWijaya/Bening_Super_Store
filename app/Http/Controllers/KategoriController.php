@@ -44,7 +44,8 @@ class KategoriController extends Controller
         DB::beginTransaction();
         try {
             Kategori::create([
-                'nama_kategori' => $request->nama_kategori
+                'nama_kategori' => $request->nama_kategori,
+                'status' => $request->has('status') ? filter_var($request->status, FILTER_VALIDATE_BOOLEAN) : true
             ]);
 
             DB::commit();
@@ -92,7 +93,8 @@ class KategoriController extends Controller
         DB::beginTransaction();
         try {
             $kategori->update([
-                'nama_kategori' => $request->nama_kategori
+                'nama_kategori' => $request->nama_kategori,
+                'status' => $request->has('status') ? filter_var($request->status, FILTER_VALIDATE_BOOLEAN) : true
             ]);
 
             DB::commit();

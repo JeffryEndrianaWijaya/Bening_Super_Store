@@ -3,7 +3,7 @@
 </button>
 
 <x-dialog id="modalTambahProduk" size="md">
-    <form action="{{ route('produk.store') }}" method="POST" class="form-ajax">
+    <form action="{{ route('produk.store') }}" method="POST" class="form-ajax" enctype="multipart/form-data">
         @csrf
         <x-dialog.header title="Tambah Produk Baru" />
 
@@ -42,6 +42,28 @@
                 </select>
                 <div class="invalid-feedback error-id_kategori"></div>
             </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select name="status" id="status" class="form-control">
+                    <option value="1">Aktif</option>
+                    <option value="0">Tidak Aktif</option>
+                </select>
+                <div class="invalid-feedback error-status"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Foto Produk <small class="text-muted">(Maksimal 4 gambar)</small></label>
+                <div class="invalid-feedback error-images d-block"></div>
+                <input type="hidden" name="image_order" id="image-order-add" value="">
+                <div id="preview-add" class="upload-preview-container">
+                    <div class="upload-dropzone-card" id="dropzone-add">
+                        <i class="fas fa-upload upload-icon"></i>
+                        <span>ADD IMAGE</span>
+                    </div>
+                </div>
+                <input type="file" id="images-add" name="images[]" class="d-none" multiple accept="image/*">
+            </div>
             
             <div class="form-group">
                 <label for="deskripsi">Deskripsi Produk</label>
@@ -50,7 +72,7 @@
                 <div class="invalid-feedback error-deskripsi"></div>
             </div>
         </x-dialog.content>
-
+ 
         <x-dialog.footer>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             <button type="submit" class="btn btn-primary">Simpan Data</button>

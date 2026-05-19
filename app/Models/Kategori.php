@@ -11,7 +11,7 @@ class Kategori extends Model
 
     protected $table = 'kategori';
     protected $primaryKey = 'id_kategori';
-    protected $fillable = ['nama_kategori'];
+    protected $fillable = ['nama_kategori', 'status'];
 
     // 3. Daftarkan kolom deleted_at sebagai tipe data date/datetime
     protected $dates = ['deleted_at']; 

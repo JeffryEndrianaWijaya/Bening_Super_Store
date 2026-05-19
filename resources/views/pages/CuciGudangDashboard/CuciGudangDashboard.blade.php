@@ -54,24 +54,6 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <form action="{{ route('cuci_gudang.destroy', $item->id_cuci_gudang) }}" method="POST"
-                                        class="d-inline form-delete">
-                                        @csrf
-                                        @method('DELETE')
-
-                                        <a href="#" class="btn btn-sm btn-info mr-1" data-toggle="modal"
-                                            data-target="#modalDetailCuciGudang-{{ $item->id_cuci_gudang }}">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-warning mr-1" data-toggle="modal"
-                                            data-target="#modalEditCuciGudang-{{ $item->id_cuci_gudang }}">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-
                                     @include('pages.CuciGudangDashboard.DetailCuciGudang', ['item' => $item])
                                     @include('pages.CuciGudangDashboard.EditCuciGudang', ['item' => $item, 'produks' => $produks])
                                 </td>
@@ -162,11 +144,11 @@
                                 $.each(errors, function (field, messages) {
                                     var input = form.find('[name="' + field + '"]');
                                     input.addClass('is-invalid');
-                                    
-                                    if(input.hasClass('select2-produk')) {
+
+                                    if (input.hasClass('select2-produk')) {
                                         input.next('.select2-container').find('.select2-selection').addClass('border-danger');
                                     }
-                                    
+
                                     form.find('.error-' + field).html(messages[0]).show();
                                 });
                             } else {

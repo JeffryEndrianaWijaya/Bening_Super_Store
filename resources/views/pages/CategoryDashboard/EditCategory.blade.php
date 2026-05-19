@@ -13,6 +13,14 @@
                     placeholder="Masukkan nama kategori..." value="{{ $item->nama_kategori }}">
                 <div class="invalid-feedback error-nama_kategori"></div>
             </div>
+            <div class="form-group">
+                <label for="status_{{ $item->id_kategori }}">Status</label>
+                <select name="status" id="status_{{ $item->id_kategori }}" class="form-control">
+                    <option value="1" {{ $item->status ? 'selected' : '' }}>Aktif</option>
+                    <option value="0" {{ !$item->status ? 'selected' : '' }}>Tidak Aktif</option>
+                </select>
+                <div class="invalid-feedback error-status"></div>
+            </div>
         </x-dialog.content>
 
         <x-dialog.footer>

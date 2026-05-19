@@ -6,8 +6,6 @@
     @endpush
 
     <div class="content">
-
-        {{-- Alert Penanganan Error & Success --}}
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 <h5><i class="icon fas fa-check"></i> Sukses!</h5>
@@ -42,6 +40,7 @@
                         <tr>
                             <th width="7%">No</th>
                             <th>Nama Kategori</th>
+                            <th>Status</th>
                             <th>Created At</th>
                             <th>Updated At</th>
                             <th width="20%">Actions</th>
@@ -52,35 +51,29 @@
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $item->nama_kategori }}</td>
+                                <td>
+                                    <span class="badge {{ $item->status ? 'badge-success' : 'badge-secondary' }}">
+                                        {{ $item->status ? 'Aktif' : 'Tidak Aktif' }}
+                                    </span>
+                                </td>
                                 <td>{{ $item->created_at ? $item->created_at->translatedFormat('l, d F Y') : '-' }}</td>
                                 <td>{{ $item->updated_at ? $item->updated_at->translatedFormat('l, d F Y') : '-' }}</td>
                                 <td>
                                     <button class="btn btn-sm btn-info mr-1" data-toggle="modal"
                                         data-target="#modalDetailKategori-{{ $item->id_kategori }}">
-                                        <i class="fas fa-eye"></i> Detail
+                                        <i class="fas fa-eye"></i>
                                     </button>
                                     <button class="btn btn-sm btn-warning mr-1" data-toggle="modal"
                                         data-target="#modalEditKategori-{{ $item->id_kategori }}">
-                                        <i class="fas fa-edit"></i> Edit
+                                        <i class="fas fa-edit"></i>
                                     </button>
-                                    <form action="{{ route('kategori.destroy', $item->id_kategori) }}" method="POST"
-                                        class="d-inline form-delete">
-                                        @csrf
-                                        @method('DELETE')
-
-
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="fas fa-trash"></i> Hapus
-                                        </button>
-                                    </form>
-
                                     @include('pages.CategoryDashboard.DetailCategory', ['item' => $item])
                                     @include('pages.CategoryDashboard.EditCategory', ['item' => $item])
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center">Belum ada data kategori.</td>
+                                <td colspan="6" class="text-center">Belum ada data kategori.</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -154,7 +147,7 @@
                             if (response.success) {
                                 // Close all modals
                                 $('.modal').modal('hide');
-                                
+
                                 // Show success message
                                 Swal.fire({
                                     icon: 'success',
@@ -175,7 +168,7 @@
                                     // Find the input and add is-invalid class
                                     var input = form.find('[name="' + field + '"]');
                                     input.addClass('is-invalid');
-                                    
+
                                     // Display error message
                                     form.find('.error-' + field).html(messages[0]);
                                 });

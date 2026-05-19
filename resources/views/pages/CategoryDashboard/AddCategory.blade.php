@@ -15,6 +15,14 @@
                     placeholder="Masukkan nama kategori...">
                 <div class="invalid-feedback error-nama_kategori"></div>
             </div>
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select name="status" id="status" class="form-control">
+                    <option value="1">Aktif</option>
+                    <option value="0">Tidak Aktif</option>
+                </select>
+                <div class="invalid-feedback error-status"></div>
+            </div>
         </x-dialog.content>
 
         {{-- 3. FOOTER DIALOG --}}

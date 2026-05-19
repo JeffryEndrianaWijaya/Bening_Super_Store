@@ -22,8 +22,10 @@ class ProdukRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->input('id_produk');
+
         return [
-            'nama_produk' => 'required|string|max:255',
+            'nama_produk' => 'required|string|max:255|unique:produks,nama_produk' . ($id ? ',' . $id . ',id_produk' : ''),
             'harga'       => 'required|numeric|min:0',
             'deskripsi'   => 'nullable|string',
             'id_kategori' => 'required',
@@ -36,6 +38,7 @@ class ProdukRequest extends FormRequest
             'nama_produk.required' => 'Nama produk wajib diisi.',
             'nama_produk.string'   => 'Nama produk harus berupa teks.',
             'nama_produk.max'      => 'Nama produk maksimal 255 karakter.',
+            'nama_produk.unique'   => 'Nama produk sudah ada, silakan gunakan nama yang berbeda.',
             
             'harga.required'       => 'Harga wajib diisi.',
             'harga.numeric'        => 'Harga harus berupa angka.',

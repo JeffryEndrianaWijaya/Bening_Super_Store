@@ -1,8 +1,9 @@
 <x-dialog id="modalEditProduk-{{ $item->id_produk }}" size="md">
-    <form action="{{ route('produk.update', $item->id_produk) }}" method="POST" class="form-ajax">
+    <form action="{{ route('produk.update', $item->id_produk) }}" method="POST" class="form-ajax" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <input type="hidden" name="id_produk" value="{{ $item->id_produk }}">
+        <input type="hidden" name="delete_images" class="delete-images-input" value="">
         <x-dialog.header title="Edit Produk" />
 
         <x-dialog.content>
@@ -38,6 +39,41 @@
                     @endforeach
                 </select>
                 <div class="invalid-feedback error-id_kategori"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="status_{{ $item->id_produk }}">Status</label>
+                <select name="status" id="status_{{ $item->id_produk }}" class="form-control">
+                    <option value="1" {{ $item->status ? 'selected' : '' }}>Aktif</option>
+                    <option value="0" {{ !$item->status ? 'selected' : '' }}>Tidak Aktif</option>
+                </select>
+                <div class="invalid-feedback error-status"></div>
+            </div>
+
+            <div class="form-group">
+                <label>Foto Produk <small class="text-muted">(Maksimal 4 gambar)</small></label>
+                <div class="invalid-feedback error-images d-block"></div>
+                <input type="hidden" name="image_order" id="image-order-edit-{{ $item->id_produk }}" class="image-order-edit" value="">
+                
+                {{-- Preview Grid (Menggabungkan gambar lama, baru, dan dropzone card) --}}
+                <div id="preview-edit-{{ $item->id_produk }}" class="upload-preview-container edit-preview-container" data-id="{{ $item->id_produk }}">
+                    @foreach($item->images as $img)
+                        <div class="img-thumb-wrapper" draggable="true" data-type="existing" data-id="{{ $img->id_image }}" id="img-wrapper-{{ $img->id_image }}">
+                            <img src="{{ asset('storage/' . $img->image_path) }}" alt="Foto Produk">
+                            <button type="button" class="btn-delete-thumb">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <span class="thumb-order-badge"></span>
+                        </div>
+                    @endforeach
+                    
+                    {{-- Upload Dropzone Card (Selalu di akhir) --}}
+                    <div class="upload-dropzone-card edit-dropzone" id="dropzone-edit-{{ $item->id_produk }}" data-id="{{ $item->id_produk }}">
+                        <i class="fas fa-upload upload-icon"></i>
+                        <span>ADD IMAGE</span>
+                    </div>
+                </div>
+                <input type="file" id="images-edit-{{ $item->id_produk }}" name="images[]" class="d-none edit-images-file-input" multiple accept="image/*" data-id="{{ $item->id_produk }}">
             </div>
 
             <div class="form-group">

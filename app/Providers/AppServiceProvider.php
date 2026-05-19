@@ -2,8 +2,9 @@
 
 namespace App\Providers;
 
+use App\View\Layouts\CustomerLayout;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Blade; 
+use Illuminate\Support\Facades\Blade;
 use App\View\Layouts\DashboardLayout;
 use App\View\Components\Dialog;
 use App\View\Components\Dialog\HeaderDialog;
@@ -25,8 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        
+
         Blade::component('dashboard-layout', DashboardLayout::class);
+        Blade::component('customer-layout', CustomerLayout::class);
         //Blade::component('header-dialog', HeaderDialog::class);
         //Blade::component('content-dialog',ContentDialog::class);
         //Blade::component('footer-dialog', FooterDialog::class);

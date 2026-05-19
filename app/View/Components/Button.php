@@ -15,7 +15,7 @@ class Button extends Component
     private string $label;
     private string $className;
 
-    public function __construct(string $color, string $label, string $className = '')
+    public function __construct(string $color = 'primary', string $label = '', string $className = '')
     {
         $this->color = $color;
         $this->label = $label;

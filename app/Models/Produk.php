@@ -17,7 +17,8 @@ class Produk extends Model
         'nama_produk',
         'harga',
         'deskripsi',
-        'id_kategori'
+        'id_kategori',
+        'status'
     ];
 
     protected $dates = ['deleted_at'];
@@ -40,5 +41,10 @@ class Produk extends Model
     public function cuci_gudangs()
     {
         return $this->hasMany(CuciGudang::class, 'id_produk', 'id_produk');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ProdukImage::class, 'id_produk', 'id_produk')->orderBy('sort_order');
     }
 }
