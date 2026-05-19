@@ -33,9 +33,11 @@
                 <select name="id_kategori" id="id_kategori_{{ $item->id_produk }}" class="form-control select2-kategori" style="width: 100%;">
                     <option value=""></option>
                     @foreach($kategoris as $kategori)
-                        <option value="{{ $kategori->id_kategori }}" {{ $item->id_kategori == $kategori->id_kategori ? 'selected' : '' }}>
-                            {{ $kategori->nama_kategori }}
-                        </option>
+                        @if($kategori->status || $item->id_kategori == $kategori->id_kategori)
+                            <option value="{{ $kategori->id_kategori }}" {{ $item->id_kategori == $kategori->id_kategori ? 'selected' : '' }}>
+                                {{ $kategori->nama_kategori }}
+                            </option>
+                        @endif
                     @endforeach
                 </select>
                 <div class="invalid-feedback error-id_kategori"></div>

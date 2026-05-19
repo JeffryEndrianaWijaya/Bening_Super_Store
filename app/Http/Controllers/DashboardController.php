@@ -14,8 +14,9 @@ class DashboardController extends Controller
         // 1. Calculate stats
         $totalPendapatan = Pesanan::where('status', 'paid')->sum('total_harga');
         $totalPesanan = Pesanan::count();
+        $pesananBelumDilayani = Pesanan::whereIn('status', ['paid', 'waiting_stock'])->count();
         $totalProduk = Produk::count();
-        $totalUser = User::where('role', 'customer')->count();
+        $totalUser = User::where('role', 'pelanggan')->count();
 
         // 2. Recent orders
         $recentOrders = Pesanan::with('user')
@@ -25,13 +26,14 @@ class DashboardController extends Controller
 
         // 3. Low stock products
         $produks = Produk::with('stoks')->get();
-        $lowStockProducts = $produks->filter(function($produk) {
+        $lowStockProducts = $produks->filter(function ($produk) {
             return $produk->total_stok <= 5;
         })->sortBy('total_stok')->take(5);
 
         return view('pages.Dashboard.Dashboard', compact(
             'totalPendapatan',
             'totalPesanan',
+            'pesananBelumDilayani',
             'totalProduk',
             'totalUser',
             'recentOrders',

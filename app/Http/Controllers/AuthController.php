@@ -22,7 +22,6 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($request->only('email', 'password'), $request->filled('remember'))) {
-            // Check if user is disabled
             if (Auth::user()->status == false) {
                 Auth::logout();
                 $request->session()->invalidate();

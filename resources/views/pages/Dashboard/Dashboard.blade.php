@@ -34,7 +34,12 @@
                     <!-- small box -->
                     <div class="small-box bg-success elevation-2" style="border-radius: 12px; overflow: hidden;">
                         <div class="inner p-3">
-                            <h3 class="font-weight-bold" style="font-size: 1.8rem;">{{ $totalPesanan }}</h3>
+                            <h3 class="font-weight-bold" style="font-size: 1.8rem;">
+                                {{ $totalPesanan }}
+                                @if($pesananBelumDilayani > 0)
+                                    <span class="badge badge-danger float-right" style="font-size: 0.9rem;">{{ $pesananBelumDilayani }} Baru</span>
+                                @endif
+                            </h3>
                             <p class="mb-0" style="font-size: 0.95rem; opacity: 0.9;">Total Pesanan</p>
                         </div>
                         <div class="icon" style="opacity: 0.15; font-size: 4.5rem; top: 10px; right: 15px;">

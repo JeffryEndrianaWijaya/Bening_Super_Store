@@ -18,8 +18,7 @@
             @if ($images->count() > 1)
                 <ol class="carousel-indicators" style="margin-bottom:0.3rem;">
                     @foreach ($images as $i => $img)
-                        <li data-target="#{{ $carouselId }}" data-slide-to="{{ $i }}"
-                            class="{{ $i === 0 ? 'active' : '' }}"
+                        <li data-target="#{{ $carouselId }}" data-slide-to="{{ $i }}" class="{{ $i === 0 ? 'active' : '' }}"
                             style="width:8px; height:8px; border-radius:50%; background:var(--primary); border:none;">
                         </li>
                     @endforeach
@@ -47,22 +46,31 @@
             @endif
         </div>
     @else
-        <a href="{{ route('shop.product.detail', $produk->id_produk) }}" style="text-decoration: none; color: inherit; display: block;">
+        <a href="{{ route('shop.product.detail', $produk->id_produk) }}"
+            style="text-decoration: none; color: inherit; display: block;">
             <div class="product-img" style="cursor: pointer;">
                 <i class="fas fa-box-open"></i>
             </div>
         </a>
     @endif
 
-    <a href="{{ route('shop.product.detail', $produk->id_produk) }}" style="text-decoration: none; color: inherit; display: block;">
+    <a href="{{ route('shop.product.detail', $produk->id_produk) }}"
+        style="text-decoration: none; color: inherit; display: block;">
         <div class="product-body" style="cursor: pointer; padding: 1.2rem;">
-            <div class="product-category text-secondary" style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.3rem;">{{ $produk->kategori->nama_kategori ?? '-' }}</div>
-            <div class="product-name text-white" style="font-weight: 700; font-size: 1.15rem; margin-bottom: 0.4rem; transition: color 0.2s;" onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='inherit'">
+            <div class="product-category text-secondary"
+                style="font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.3rem;">
+                {{ $produk->kategori->nama_kategori ?? '-' }}
+            </div>
+            <div class="product-name"
+                style="font-weight: 700; font-size: 1.15rem; margin-bottom: 0.4rem; transition: color 0.2s;"
+                onmouseover="this.style.color='var(--primary)'" onmouseout="this.style.color='inherit'">
                 {{ $produk->nama_produk }}
             </div>
             <div class="product-price text-success" style="font-weight: 800; font-size: 1.1rem;">
                 @if ($diskon)
-                    <span class="price-original text-danger" style="text-decoration: line-through; font-size: 0.9rem; margin-right: 0.5rem; font-weight: 600;">Rp {{ number_format($produk->harga, 0, ',', '.') }}</span>
+                    <span class="price-original text-danger"
+                        style="text-decoration: line-through; font-size: 0.9rem; margin-right: 0.5rem; font-weight: 600;">Rp
+                        {{ number_format($produk->harga, 0, ',', '.') }}</span>
                 @endif
                 Rp {{ number_format($hargaFinal, 0, ',', '.') }}
             </div>

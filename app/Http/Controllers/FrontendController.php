@@ -12,13 +12,23 @@ class FrontendController extends Controller
     public function home()
     {
         $kategoris = Kategori::where('status', true)->get();
-        $produks = Produk::with('kategori', 'images')->where('status', true)->latest()->take(8)->get();
+        $produks = Produk::with('kategori', 'images')
+            ->where('status', true)
+            ->whereHas('kategori', function ($query) {
+                $query->where('status', true);
+            })
+            ->latest()
+            ->take(8)
+            ->get();
 
         // Produk yang sedang cuci gudang (aktif saat ini)
         $now = Carbon::now();
         $cuciGudangAktif = CuciGudang::with('produk')
             ->whereHas('produk', function ($query) {
-                $query->where('status', true);
+                $query->where('status', true)
+                      ->whereHas('kategori', function ($q) {
+                          $q->where('status', true);
+                      });
             })
             ->where('waktu_mulai', '<=', $now)
             ->where('waktu_selesai', '>=', $now)
@@ -34,10 +44,20 @@ class FrontendController extends Controller
 
         if ($id) {
             $kategoriAktif = Kategori::findOrFail($id);
+            // If the requested category is inactive, redirect or return empty (or let it be if we still want direct links to work, but it's better to secure it)
+            if (!$kategoriAktif->status) {
+                return redirect()->route('shop.category.index')->with('error', 'Kategori tidak tersedia.');
+            }
             $produks = Produk::with('kategori', 'images')->where('id_kategori', $id)->where('status', true)->latest()->get();
         } else {
             $kategoriAktif = null;
-            $produks = Produk::with('kategori', 'images')->where('status', true)->latest()->get();
+            $produks = Produk::with('kategori', 'images')
+                ->where('status', true)
+                ->whereHas('kategori', function ($query) {
+                    $query->where('status', true);
+                })
+                ->latest()
+                ->get();
         }
 
         // Get active discounts indexed by product id
@@ -51,7 +71,12 @@ class FrontendController extends Controller
 
     public function productDetail($id)
     {
-        $produk = Produk::with(['kategori', 'images', 'ulasans.user'])->where('status', true)->findOrFail($id);
+        $produk = Produk::with(['kategori', 'images', 'ulasans.user'])
+            ->where('status', true)
+            ->whereHas('kategori', function($q) {
+                $q->where('status', true);
+            })
+            ->findOrFail($id);
         
         $now = Carbon::now();
         $diskon = CuciGudang::where('id_produk', $id)

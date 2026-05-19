@@ -391,9 +391,9 @@
 
             {{-- Column Right: Detail Info --}}
             <div class="detail-info">
-                <div class="detail-category">{{ $produk->kategori->nama_kategori ?? 'Umum' }}</div>
-                <h1 class="detail-title text-white">{{ $produk->nama_produk }}</h1>
 
+                <h1 class="detail-title" style="color: var(--text-primary);">{{ $produk->nama_produk }}</h1>
+                <div class="detail-category">{{ $produk->kategori->nama_kategori ?? 'Umum' }}</div>
                 {{-- Rating Summary --}}
                 <div class="rating-summary">
                     <div class="stars">
@@ -431,10 +431,11 @@
 
                 {{-- Description --}}
                 <div class="detail-description">
-                    <h5 class="text-white font-weight-bold mb-3" style="font-size: 1.1rem;"><i
+                    <h5 class="font-weight-bold mb-3" style="color: var(--text-primary); font-size: 1.1rem;"><i
                             class="fas fa-info-circle mr-2 text-primary"></i> Deskripsi Produk</h5>
                     <p style="white-space: pre-line;">
-                        {!!  $produk->deskripsi ?? 'Tidak ada deskripsi untuk produk ini.' !!}</p>
+                        {!!  $produk->deskripsi ?? 'Tidak ada deskripsi untuk produk ini.' !!}
+                    </p>
                 </div>
 
                 {{-- Purchase Actions --}}
@@ -487,7 +488,8 @@
         {{-- Section: Reviews --}}
         <div class="reviews-container">
             <div class="reviews-header">
-                <h3 class="text-white font-weight-bold m-0"><i class="fas fa-comments text-primary mr-2"></i>Ulasan
+                <h3 class="font-weight-bold m-0" style="color: var(--text-primary);"><i
+                        class="fas fa-comments text-primary mr-2"></i>Ulasan
                     Pelanggan</h3>
                 <span class="badge badge-primary px-3 py-2 font-weight-bold"
                     style="font-size:0.9rem; border-radius:30px;">{{ $totalUlasan }} Ulasan</span>
@@ -496,7 +498,7 @@
             @forelse($produk->ulasans as $ulasan)
                 <div class="review-card">
                     <div class="review-meta">
-                        <div class="review-author text-white">
+                        <div class="review-author" style="color: var(--text-primary);">
                             <div class="review-author-avatar">
                                 {{ strtoupper(substr($ulasan->user->name ?? 'T', 0, 1)) }}
                             </div>
@@ -524,7 +526,7 @@
                             <div class="review-reply-header">
                                 <i class="fas fa-reply mr-1"></i> Balasan Admin:
                             </div>
-                            <div class="text-white">
+                            <div style="color: var(--text-primary);">
                                 "{{ $ulasan->balasan }}"
                             </div>
                         </div>

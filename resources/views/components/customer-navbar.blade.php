@@ -25,6 +25,9 @@
         </button>
 
         @auth
+            <a href="{{ route('profile') }}" class="btn-cart" title="Profil Saya" style="margin-right: 0.5rem;">
+                <i class="fas fa-user-circle"></i>
+            </a>
             <a href="{{ route('keranjang.index') }}" class="btn-cart">
                 <i class="fas fa-shopping-cart"></i>
                 @php $cartCount = \App\Models\Keranjang::where('user_id', auth()->id())->sum('qty'); @endphp

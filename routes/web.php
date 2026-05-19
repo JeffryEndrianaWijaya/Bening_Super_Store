@@ -46,6 +46,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/pesanan/{id}/simulasi-bayar', [PesananFrontController::class, 'simulasiBayar'])->name('pesanan.simulasi_bayar');
 
     Route::post('/ulasan', [FrontendController::class, 'storeReview'])->name('ulasan.store');
+
+    // Profil (bisa diakses admin dan pelanggan)
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
 });
 
 // Midtrans Callback (no auth needed)

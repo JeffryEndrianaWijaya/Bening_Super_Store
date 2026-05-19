@@ -35,9 +35,11 @@
                     class="form-control select2-kategori" style="width: 100%;">
                     <option value=""></option>
                     @foreach ($kategoris as $kategori)
-                        <option value="{{ $kategori->id_kategori }}">
-                            {{ $kategori->nama_kategori }}
-                        </option>
+                        @if($kategori->status)
+                            <option value="{{ $kategori->id_kategori }}">
+                                {{ $kategori->nama_kategori }}
+                            </option>
+                        @endif
                     @endforeach
                 </select>
                 <div class="invalid-feedback error-id_kategori"></div>
