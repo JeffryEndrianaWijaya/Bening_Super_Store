@@ -2,9 +2,26 @@
     <!-- Content Header (Page header) -->
     <div class="content-header pt-3">
         <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
+            <div class="row mb-2 align-items-center">
+                <div class="col-md-8 col-sm-6">
                     <h1 class="m-0 font-weight-bold text-dark"><i class="fas fa-chart-line mr-2 text-primary"></i>Ringkasan Sistem</h1>
+                </div>
+                <div class="col-md-4 col-sm-6 mt-2 mt-sm-0 text-right">
+                    <form action="{{ route('dashboard') }}" method="GET" id="filterYearForm" class="form-inline justify-content-end">
+                        <div class="input-group elevation-1" style="border-radius: 20px; overflow: hidden; border: 1px solid #ced4da;">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text bg-white border-0 text-muted" style="border-radius: 20px 0 0 20px; font-size: 0.85rem;">
+                                    <i class="fas fa-filter mr-1 text-primary"></i> KPI Tahun:
+                                </span>
+                            </div>
+                            <select name="year" class="form-control bg-white border-0" style="border-radius: 0 20px 20px 0; font-size: 0.85rem; font-weight: bold; cursor: pointer; min-width: 120px;" onchange="document.getElementById('filterYearForm').submit();">
+                                <option value="all" {{ $selectedYear == 'all' ? 'selected' : '' }}>Semua Waktu</option>
+                                @foreach($years as $y)
+                                    <option value="{{ $y }}" {{ $selectedYear == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
