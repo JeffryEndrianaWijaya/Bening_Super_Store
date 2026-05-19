@@ -1,4 +1,4 @@
 {{-- Footer Component --}}
 <footer class="footer-customer">
-    &copy; {{ date('Y') }} TokoKu. All rights reserved.
+    &copy; 2026 Bening Super Store. All rights reserved.
 </footer>

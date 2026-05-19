@@ -1,6 +1,26 @@
 <x-customer-layout title="Profil Saya">
     @push('css')
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/css/intlTelInput.css">
         <style>
+            .iti {
+                display: block;
+                width: 100%;
+            }
+            .iti__flag-container {
+                z-index: 5;
+            }
+            /* Fix styling in dark/light mode for intl-tel-input */
+            .iti__country-list {
+                background-color: var(--bg-glass) !important;
+                border: 1px solid var(--border-glass) !important;
+                color: var(--text-primary) !important;
+            }
+            .iti__country {
+                padding: 8px 10px !important;
+            }
+            .iti__country:hover {
+                background-color: rgba(255, 255, 255, 0.1) !important;
+            }
             .profile-container {
                 max-width: 800px;
                 margin: 0 auto;
@@ -140,6 +160,12 @@
                     <input type="email" id="email" name="email" class="form-control" value="{{ old('email', $user->email) }}" required>
                 </div>
 
+                <div class="form-group">
+                    <label for="phone_input">Nomor Telepon</label>
+                    <input type="tel" id="phone_input" class="form-control" value="{{ old('phone', $user->phone) }}" placeholder="Masukkan nomor telepon">
+                    <input type="hidden" id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
+                </div>
+
                 <div class="section-divider">
                     <i class="fas fa-lock"></i> Keamanan Akun
                 </div>
@@ -160,4 +186,68 @@
             </form>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/intlTelInput.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const phoneInput = document.querySelector("#phone_input");
+                const phoneHidden = document.querySelector("#phone");
+                
+                const iti = window.intlTelInput(phoneInput, {
+                    initialCountry: "id",
+                    separateDialCode: true,
+                    preferredCountries: ["id", "sg", "my"],
+                    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/utils.js"
+                });
+
+                // Update hidden input on any change
+                const updatePhoneValue = () => {
+                    phoneHidden.value = iti.getNumber();
+                };
+
+                // Filter input: no leading zero, only digits, max 13 digits, format with hyphens (e.g., 812-3456-7890)
+                phoneInput.addEventListener('input', function() {
+                    let value = this.value.replace(/\D/g, '');
+                    while (value.startsWith('0')) {
+                        value = value.substring(1);
+                    }
+                    if (value.length > 13) {
+                        value = value.substring(0, 13);
+                    }
+                    
+                    let formattedValue = '';
+                    if (value.length > 0) {
+                        if (value.length <= 3) {
+                            formattedValue = value;
+                        } else if (value.length <= 7) {
+                            formattedValue = value.substring(0, 3) + '-' + value.substring(3);
+                        } else {
+                            formattedValue = value.substring(0, 3) + '-' + value.substring(3, 7) + '-' + value.substring(7);
+                        }
+                    }
+                    this.value = formattedValue;
+                    updatePhoneValue();
+                });
+
+                phoneInput.addEventListener('change', updatePhoneValue);
+                
+                // Form submit validation/normalization check
+                phoneInput.closest('form').addEventListener('submit', function() {
+                    updatePhoneValue();
+                });
+
+                // Format initial value if present
+                if (phoneInput.value) {
+                    // Strip non-numeric and country code for raw format first
+                    let rawVal = phoneInput.value;
+                    if (rawVal.startsWith('+62')) {
+                        rawVal = rawVal.replace('+62', '');
+                    }
+                    phoneInput.value = rawVal;
+                    phoneInput.dispatchEvent(new Event('input'));
+                }
+            });
+        </script>
+    @endpush
 </x-customer-layout>

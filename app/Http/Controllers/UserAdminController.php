@@ -42,23 +42,45 @@ class UserAdminController extends Controller
             $request->validate([
                 'name' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
+                'phone' => 'nullable|string|max:20',
                 'password' => 'required|string|min:8|confirmed',
-                'role' => 'required|in:admin,pelanggan',
+                'role' => 'required|in:admin,pelanggan,kasir,gudang',
             ]);
 
             User::create([
                 'name' => $request->name,
                 'email' => $request->email,
+                'phone' => $request->phone,
                 'password' => Hash::make($request->password),
                 'role' => $request->role,
                 'status' => $request->has('status') ? filter_var($request->status, FILTER_VALIDATE_BOOLEAN) : true,
             ]);
 
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pengguna baru berhasil ditambahkan.'
+                ]);
+            }
+
             return redirect()->route('user_admin.index')->with('success', 'Pengguna baru berhasil ditambahkan.');
         } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $e->errors(),
+                    'message' => 'Gagal menambah pengguna. Periksa kembali isian form Anda.'
+                ], 422);
+            }
             return redirect()->back()->withErrors($e->errors())->withInput()->with('error', 'Gagal menambah pengguna. Periksa kembali isian form Anda.');
         } catch (Exception $e) {
             Log::error('Gagal menambah pengguna: ' . $e->getMessage());
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal menambah pengguna. Silakan coba lagi.'
+                ], 500);
+            }
             return redirect()->back()->withInput()->with('error', 'Gagal menambah pengguna. Silakan coba lagi.');
         }
     }
@@ -90,7 +112,8 @@ class UserAdminController extends Controller
             $rules = [
                 'name' => 'required|string|max:255',
                 'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
-                'role' => 'required|in:admin,pelanggan',
+                'phone' => 'nullable|string|max:20',
+                'role' => 'required|in:admin,pelanggan,kasir,gudang',
             ];
 
             if ($request->filled('password')) {
@@ -102,6 +125,7 @@ class UserAdminController extends Controller
             $dataToUpdate = [
                 'name' => $request->name,
                 'email' => $request->email,
+                'phone' => $request->phone,
                 'role' => $request->role,
                 'status' => $request->has('status') ? filter_var($request->status, FILTER_VALIDATE_BOOLEAN) : true,
             ];
@@ -112,11 +136,31 @@ class UserAdminController extends Controller
 
             $user->update($dataToUpdate);
 
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Data pengguna berhasil diperbarui.'
+                ]);
+            }
+
             return redirect()->route('user_admin.index')->with('success', 'Data pengguna berhasil diperbarui.');
         } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'errors' => $e->errors(),
+                    'message' => 'Gagal memperbarui pengguna. Periksa kembali isian form Anda.'
+                ], 422);
+            }
             return redirect()->back()->withErrors($e->errors())->withInput()->with('error', 'Gagal memperbarui pengguna. Periksa kembali isian form Anda.');
         } catch (Exception $e) {
             Log::error('Gagal memperbarui pengguna: ' . $e->getMessage());
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Gagal memperbarui pengguna. Silakan coba lagi.'
+                ], 500);
+            }
             return redirect()->back()->withInput()->with('error', 'Gagal memperbarui pengguna. Silakan coba lagi.');
         }
     }

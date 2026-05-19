@@ -18,7 +18,7 @@
                 {{-- <img src="dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image"> --}}
             </div>
             <div class="info">
-                <a href="{{ route('profile') }}" class="d-block">{{ Auth::user()->name ?? 'user' }}</a>
+                <a href="{{ route('profile_admin') }}" class="d-block">{{ Auth::user()->name ?? 'user' }}</a>
             </div>
         </div>
 
@@ -36,6 +36,7 @@
                     </a>
                 </li>
 
+                @if(in_array(auth()->user()->role, ['admin', 'gudang']))
                 <li class="nav-item">
                     <a href="{{ route('kategori.index') }}"
                         class="nav-link {{ $activeMenu == 'category' ? 'active' : '' }}">
@@ -62,6 +63,9 @@
                         </p>
                     </a>
                 </li>
+                @endif
+
+                @if(in_array(auth()->user()->role, ['admin']))
                 <li class="nav-item">
                     <a href="{{ route('cuci_gudang.index') }}"
                         class="nav-link {{ $activeMenu == 'cuci_gudang' ? 'active' : '' }}">
@@ -71,6 +75,9 @@
                         </p>
                     </a>
                 </li>
+                @endif
+
+                @if(in_array(auth()->user()->role, ['admin', 'kasir']))
                 <li class="nav-item">
                     <a href="{{ route('pesanan_admin.index') }}"
                         class="nav-link {{ $activeMenu == 'pesanan' ? 'active' : '' }}">
@@ -86,6 +93,9 @@
                         </p>
                     </a>
                 </li>
+                @endif
+
+                @if(in_array(auth()->user()->role, ['admin']))
                 <li class="nav-item">
                     <a href="{{ route('user_admin.index') }}"
                         class="nav-link {{ $activeMenu == 'user_admin' ? 'active' : '' }}">
@@ -103,6 +113,35 @@
                             Ulasan Pelanggan
                         </p>
                     </a>
+                </li>
+                @endif
+
+                <!-- SYSTEM OUT -->
+                <li class="nav-header text-muted text-uppercase" style="font-size: 0.7rem; letter-spacing: 1px; padding: 15px 16px 5px;">Sistem</li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link bg-light-danger" onclick="event.preventDefault(); 
+                        Swal.fire({
+                            title: 'Keluar dari Sistem?',
+                            text: 'Anda harus memasukkan kembali kredensial Anda untuk masuk lagi!',
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#d33',
+                            cancelButtonColor: '#3085d6',
+                            confirmButtonText: 'Ya, Keluar!',
+                            cancelButtonText: 'Batal'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.getElementById('logout-form').submit();
+                            }
+                        });">
+                        <i class="nav-icon fas fa-sign-out-alt text-danger"></i>
+                        <p class="text-danger font-weight-bold">
+                            Logout
+                        </p>
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
                 </li>
             </ul>
         </nav>

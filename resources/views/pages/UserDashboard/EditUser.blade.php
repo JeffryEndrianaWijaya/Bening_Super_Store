@@ -8,7 +8,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('user_admin.update', $item->id) }}" method="POST">
+            <form id="formEditUser-{{ $item->id }}" class="form-edit-user" data-user-id="{{ $item->id }}" action="{{ route('user_admin.update', $item->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <div class="modal-body">
@@ -23,9 +23,23 @@
                     </div>
 
                     <div class="form-group">
+                        <label>No. Telepon</label>
+                        <div class="d-block w-100">
+                            <!-- We can use a unique class or specific id per user since there is a loop or modal per user, wait! -->
+                            <!-- Is EditUser modal inside a loop? Let's check UserDashboard.blade.php. -->
+                            <!-- Usually it's in a loop like foreach($items as $item) include('EditUser'). -->
+                            <!-- If so, we need unique IDs using $item->id. Yes! ID like id="phone_edit_{{ $item->id }}" is perfect! -->
+                            <input type="tel" id="phone_edit_{{ $item->id }}" data-user-id="{{ $item->id }}" class="form-control phone-edit-input w-100" placeholder="821-xxxx-xxxx">
+                            <input type="hidden" name="phone" id="phone_edit_hidden_{{ $item->id }}" value="{{ old('phone', $item->phone) }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label>Role</label>
                         <select name="role" class="form-control" required>
                             <option value="pelanggan" {{ (old('role', $item->role) == 'pelanggan') ? 'selected' : '' }}>Pelanggan</option>
+                            <option value="kasir" {{ (old('role', $item->role) == 'kasir') ? 'selected' : '' }}>Kasir</option>
+                            <option value="gudang" {{ (old('role', $item->role) == 'gudang') ? 'selected' : '' }}>Gudang</option>
                             <option value="admin" {{ (old('role', $item->role) == 'admin') ? 'selected' : '' }}>Admin</option>
                         </select>
                     </div>

@@ -14,6 +14,7 @@
         <div class="container-fluid">
             <!-- Small boxes (Stat box) -->
             <div class="row">
+                @if(in_array(auth()->user()->role, ['admin']))
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-info elevation-2" style="border-radius: 12px; overflow: hidden;">
@@ -29,7 +30,9 @@
                         </a>
                     </div>
                 </div>
+                @endif
                 <!-- ./col -->
+                @if(in_array(auth()->user()->role, ['admin', 'kasir']))
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-success elevation-2" style="border-radius: 12px; overflow: hidden;">
@@ -50,7 +53,9 @@
                         </a>
                     </div>
                 </div>
+                @endif
                 <!-- ./col -->
+                @if(in_array(auth()->user()->role, ['admin']))
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-warning elevation-2" style="border-radius: 12px; overflow: hidden;">
@@ -66,7 +71,9 @@
                         </a>
                     </div>
                 </div>
+                @endif
                 <!-- ./col -->
+                @if(in_array(auth()->user()->role, ['admin', 'gudang']))
                 <div class="col-lg-3 col-6">
                     <!-- small box -->
                     <div class="small-box bg-danger elevation-2" style="border-radius: 12px; overflow: hidden;">
@@ -82,14 +89,21 @@
                         </a>
                     </div>
                 </div>
+                @endif
                 <!-- ./col -->
             </div>
             <!-- /.row -->
 
             <!-- Main row -->
             <div class="row mt-3">
+                @php
+                    $isKasir = auth()->user()->role === 'kasir';
+                    $isGudang = auth()->user()->role === 'gudang';
+                @endphp
+
+                @if(in_array(auth()->user()->role, ['admin', 'kasir']))
                 <!-- Left col -->
-                <div class="col-lg-8">
+                <div class="{{ $isKasir ? 'col-lg-12' : 'col-lg-8' }}">
                     <!-- TABLE: LATEST ORDERS -->
                     <div class="card card-primary card-outline elevation-1" style="border-radius: 8px;">
                         <div class="card-header border-transparent py-3">
@@ -167,8 +181,10 @@
                     <!-- /.card -->
                 </div>
                 <!-- /.col -->
+                @endif
 
-                <div class="col-lg-4">
+                @if(in_array(auth()->user()->role, ['admin', 'gudang']))
+                <div class="{{ $isGudang ? 'col-lg-12' : 'col-lg-4' }}">
                     <!-- PRODUCT LIST -->
                     <div class="card card-warning card-outline elevation-1" style="border-radius: 8px;">
                         <div class="card-header py-3">
@@ -217,6 +233,7 @@
                     <!-- /.card -->
                 </div>
                 <!-- /.col -->
+                @endif
             </div>
             <!-- /.row -->
         </div>

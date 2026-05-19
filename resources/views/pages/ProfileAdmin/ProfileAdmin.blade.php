@@ -1,4 +1,17 @@
 <x-dashboard-layout title="Profil Pengguna" activeMenu="profile">
+    @push('css')
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/css/intlTelInput.css">
+        <style>
+            .iti {
+                display: block;
+                width: 100%;
+            }
+            .iti__flag-container {
+                z-index: 5;
+            }
+        </style>
+    @endpush
+
     <div class="content">
         @if (session('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -42,6 +55,9 @@
                                 <b>Email</b> <a class="float-right">{{ $user->email }}</a>
                             </li>
                             <li class="list-group-item">
+                                <b>No. Telepon</b> <a class="float-right">{{ $user->phone ?? '-' }}</a>
+                            </li>
+                            <li class="list-group-item">
                                 <b>Status</b> <a class="float-right badge badge-success">Aktif</a>
                             </li>
                         </ul>
@@ -59,7 +75,7 @@
                     <div class="card-body">
                         <div class="tab-content">
                             <div class="tab-pane active" id="settings">
-                                <form action="{{ route('profile.update') }}" method="POST" class="form-horizontal">
+                                <form action="{{ route('profile_admin.update') }}" method="POST" class="form-horizontal">
                                     @csrf
                                     @method('PUT')
                                     
@@ -74,6 +90,14 @@
                                         <label for="email" class="col-sm-3 col-form-label">Email</label>
                                         <div class="col-sm-9">
                                             <input type="email" class="form-control" id="email" name="email" value="{{ old('email', $user->email) }}" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="phone_input" class="col-sm-3 col-form-label">No. Telepon</label>
+                                        <div class="col-sm-9">
+                                            <input type="tel" class="form-control" id="phone_input" value="{{ old('phone', $user->phone) }}" placeholder="Masukkan nomor telepon">
+                                            <input type="hidden" id="phone" name="phone" value="{{ old('phone', $user->phone) }}">
                                         </div>
                                     </div>
 
@@ -108,4 +132,68 @@
             </div>
         </div>
     </div>
+
+    @push('scripts')
+        <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/intlTelInput.min.js"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const phoneInput = document.querySelector("#phone_input");
+                const phoneHidden = document.querySelector("#phone");
+                
+                const iti = window.intlTelInput(phoneInput, {
+                    initialCountry: "id",
+                    separateDialCode: true,
+                    preferredCountries: ["id", "sg", "my"],
+                    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@23.0.4/build/js/utils.js"
+                });
+
+                // Update hidden input on any change
+                const updatePhoneValue = () => {
+                    phoneHidden.value = iti.getNumber();
+                };
+
+                // Filter input: no leading zero, only digits, max 13 digits, format with hyphens (e.g., 812-3456-7890)
+                phoneInput.addEventListener('input', function() {
+                    let value = this.value.replace(/\D/g, '');
+                    while (value.startsWith('0')) {
+                        value = value.substring(1);
+                    }
+                    if (value.length > 13) {
+                        value = value.substring(0, 13);
+                    }
+                    
+                    let formattedValue = '';
+                    if (value.length > 0) {
+                        if (value.length <= 3) {
+                            formattedValue = value;
+                        } else if (value.length <= 7) {
+                            formattedValue = value.substring(0, 3) + '-' + value.substring(3);
+                        } else {
+                            formattedValue = value.substring(0, 3) + '-' + value.substring(3, 7) + '-' + value.substring(7);
+                        }
+                    }
+                    this.value = formattedValue;
+                    updatePhoneValue();
+                });
+
+                phoneInput.addEventListener('change', updatePhoneValue);
+                
+                // Form submit validation/normalization check
+                phoneInput.closest('form').addEventListener('submit', function() {
+                    updatePhoneValue();
+                });
+
+                // Format initial value if present
+                if (phoneInput.value) {
+                    // Strip non-numeric and country code for raw format first
+                    let rawVal = phoneInput.value;
+                    if (rawVal.startsWith('+62')) {
+                        rawVal = rawVal.replace('+62', '');
+                    }
+                    phoneInput.value = rawVal;
+                    phoneInput.dispatchEvent(new Event('input'));
+                }
+            });
+        </script>
+    @endpush
 </x-dashboard-layout>

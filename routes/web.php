@@ -47,9 +47,9 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/ulasan', [FrontendController::class, 'storeReview'])->name('ulasan.store');
 
-    // Profil (bisa diakses admin dan pelanggan)
-    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'index'])->name('profile');
-    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    // Profil (untuk pelanggan/frontend)
+    Route::get('/profile', [\App\Http\Controllers\ProfileFrontController::class, 'index'])->name('profile');
+    Route::put('/profile', [\App\Http\Controllers\ProfileFrontController::class, 'update'])->name('profile.update');
 });
 
 // Midtrans Callback (no auth needed)
@@ -58,6 +58,8 @@ Route::post('/midtrans/callback', [CheckoutController::class, 'callback'])->name
 // ===== BACKEND (Admin Panel) =====
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/profile_admin', [\App\Http\Controllers\ProfileAdminController::class, 'index'])->name('profile_admin');
+    Route::put('/profile_admin', [\App\Http\Controllers\ProfileAdminController::class, 'update'])->name('profile_admin.update');
     Route::resource('/kategori', KategoriController::class);
     Route::resource('/produk', ProdukController::class);
     Route::resource('/stok', StokController::class);

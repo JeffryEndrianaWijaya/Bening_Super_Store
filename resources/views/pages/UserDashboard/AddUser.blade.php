@@ -14,7 +14,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form action="{{ route('user_admin.store') }}" method="POST">
+            <form id="formAddUser" action="{{ route('user_admin.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
@@ -28,9 +28,19 @@
                     </div>
 
                     <div class="form-group">
+                        <label>No. Telepon</label>
+                        <div class="d-block w-100">
+                            <input type="tel" id="phone_add" class="form-control w-100" placeholder="821-xxxx-xxxx">
+                            <input type="hidden" name="phone" id="phone_add_hidden" value="{{ old('phone') }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label>Role</label>
                         <select name="role" class="form-control" required>
                             <option value="pelanggan" {{ old('role') == 'pelanggan' ? 'selected' : '' }}>Pelanggan</option>
+                            <option value="kasir" {{ old('role') == 'kasir' ? 'selected' : '' }}>Kasir</option>
+                            <option value="gudang" {{ old('role') == 'gudang' ? 'selected' : '' }}>Gudang</option>
                             <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
                         </select>
                     </div>
